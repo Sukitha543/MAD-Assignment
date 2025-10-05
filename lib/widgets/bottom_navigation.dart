@@ -57,7 +57,7 @@ class _BottomNavigationState extends State<BottomNavigation> {
             label: "Home",
           ),
           BottomNavigationBarItem(
-            icon:Icon(Icons.shop),
+            icon:Icon(Icons.watch),
             label: "Products",
           ),
           BottomNavigationBarItem(
