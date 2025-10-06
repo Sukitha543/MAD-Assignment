@@ -15,6 +15,7 @@ class ProductCard extends StatelessWidget {
     return GestureDetector(
           onTap: onTap,
           child: Card(
+            color: Colors.white,
              margin: const EdgeInsets.all(8),
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
         child: Padding(

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:mad_assignment/models/cart.dart';
 import 'package:mad_assignment/models/product.dart';
 import 'package:mad_assignment/widgets/add_to_cart_button.dart';
 import 'package:mad_assignment/widgets/spec_card.dart';
@@ -53,7 +54,10 @@ class ProductDetailsPage extends StatelessWidget {
                     SpecCard(product: product,),
                     SizedBox(height: 10,),
                     AddToCartButton(onPressed: () {
-                      
+                       Cart.instance.addItem(product);
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          SnackBar(content: Text("${product.model} added to cart")),
+                        );
                     },)
                   ],
                 )

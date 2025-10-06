@@ -1,27 +1,32 @@
 import 'package:mad_assignment/models/product.dart';
 
 class Cart {
-  // Singleton pattern
-  static final Cart _instance = Cart._internal();
-  factory Cart() => _instance;
-  Cart._internal();
+  // Step 1: create a private constructor
+  Cart._privateConstructor();
 
-  // List of products in cart
+  // Step 2: create a single instance
+  static final Cart _instance = Cart._privateConstructor();
+
+  // Step 3: access that instance using a getter
+  static Cart get instance => _instance;
+
+  // Step 4: list to hold added products
   final List<Product> _items = [];
 
-  List<Product> get items => _items;
-
-  double get totalPrice => _items.fold(0, (sum, item) => sum + item.price);
-
-  void addProduct(Product product) {
+  // Step 5: add product
+  void addItem(Product product) {
     _items.add(product);
   }
 
-  void removeProduct(Product product) {
+  // Step 6: remove product
+  void removeItem(Product product) {
     _items.remove(product);
   }
 
-  void clearCart() {
-    _items.clear();
-  }
+  // Step 7: get all items
+  List<Product> get items => _items;
+
+  // Step 8: get total price
+  double get totalPrice =>
+      _items.fold(0, (sum, item) => sum + item.price);
 }

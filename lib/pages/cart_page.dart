@@ -1,4 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:mad_assignment/models/cart.dart';
+import 'package:mad_assignment/widgets/cart_item_card.dart';
+import 'package:mad_assignment/widgets/checkout_summary_card.dart';
+
 
 class CartPage extends StatefulWidget {
   const CartPage({super.key});
@@ -8,14 +12,39 @@ class CartPage extends StatefulWidget {
 }
 
 class _CartPageState extends State<CartPage> {
+  final cart = Cart.instance;
+
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: SafeArea(
-        child: SingleChildScrollView(
-          child: Center(
-            child: Text("CART"),
-          )
+    return SafeArea(
+      child: Scaffold(
+        backgroundColor: Colors.white,
+        body: Column(
+          children: [
+            Expanded(
+              child: ListView.builder(
+                physics: BouncingScrollPhysics(),
+                itemCount: cart.items.length,
+                itemBuilder: (context, index) {
+                  final product = cart.items[index];
+                  return CartItemCard(
+                   product: product,
+                   onDelete: () {
+                     setState(() {
+                       cart.removeItem(product);
+                     });
+                   },
+                  );
+                },
+              ),
+            ),
+            CheckoutSummaryCard(
+              totalPrice: cart.totalPrice,
+              onCheckout: (){
+                  
+              },
+            ),
+          ],
         ),
       ),
     );
