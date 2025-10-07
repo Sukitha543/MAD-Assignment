@@ -3,11 +3,15 @@ import 'package:flutter/material.dart';
 class ContactCard extends StatelessWidget {
   const ContactCard({super.key});
 
+  final String location = "41-Galle Road, Colombo 03";
+  final int contact = 0112353787;
+  final String email = "info@TimeBridge.lk";
+
   @override
   Widget build(BuildContext context) {
     return Container(
       width: 320,
-      height: 350,
+      padding: EdgeInsets.all(20),
       decoration: BoxDecoration(
         color: Colors.white,
         borderRadius: BorderRadius.circular(10),
@@ -24,16 +28,97 @@ class ContactCard extends StatelessWidget {
         children: [
           Center(
             child: Text(
-            "Contact Information")
+            "Contact Information",
+            style: TextStyle(
+              fontSize:20,
+              fontWeight: FontWeight.bold,
+              color: Colors.blueGrey[800],
+            ),)
           ),
           SizedBox(height: 25,),
-          Text("Our Location"),
-          Text("Colombo 3 - 41 Galle Road"),
-          Text("Call Us"),
-          Text("0112353787"),
-          Text("Emai"),
-          Text("info@TimeBridge.lk")
-
+          Row(
+            children: [
+              Icon(
+                Icons.location_on,
+                color: Colors.black,
+                size: 28,
+              ),
+              SizedBox(width: 10),
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      "Our Location",
+                      style: TextStyle(
+                        fontSize: 16,
+                        fontWeight: FontWeight.w600,
+                      ),
+                    ),
+                    Text(
+                      location,
+                      style: TextStyle(color: Colors.grey[700]),
+                      ),
+                  ],
+                )),
+            ],
+          ),
+          SizedBox(height: 20),
+           Row(
+            children: [
+              Icon(
+                Icons.call,
+                color: Colors.black,
+                size: 28,
+              ),
+              SizedBox(width: 10),
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      "Call Us",
+                      style: TextStyle(
+                        fontSize: 16,
+                        fontWeight: FontWeight.w600,
+                      ),
+                    ),
+                    Text(
+                      "$contact",
+                      style: TextStyle(color: Colors.grey[700]),
+                      ),
+                  ],
+                )),
+            ],
+          ),
+          SizedBox(height: 20),
+           Row(
+            children: [
+              Icon(
+                Icons.email,
+                color: Colors.black,
+                size: 28,
+              ),
+              SizedBox(width: 10),
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      "Email",
+                      style: TextStyle(
+                        fontSize: 16,
+                        fontWeight: FontWeight.w600,
+                      ),
+                    ),
+                    Text(
+                      email,
+                      style: TextStyle(color: Colors.grey[700]),
+                      ),
+                  ],
+                )),
+            ],
+          ),
         ],
       ),
     );

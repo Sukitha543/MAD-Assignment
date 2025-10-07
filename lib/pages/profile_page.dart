@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:mad_assignment/widgets/profile_card.dart';
+
+
 
 class ProfilePage extends StatefulWidget {
   const ProfilePage({super.key});
@@ -8,16 +11,24 @@ class ProfilePage extends StatefulWidget {
 }
 
 class _ProfilePageState extends State<ProfilePage> {
+
+  
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: SafeArea(
-        child: SingleChildScrollView(
+    return SafeArea(
+      child: Scaffold(
+        backgroundColor: Colors.white,
+        body: SingleChildScrollView(
+          physics: BouncingScrollPhysics(),
           child: Center(
-            child: Text("PROFILE"),
-          )
+            child: Column(
+              children: [
+                ProfileCard(),
+              ],
+            ),
+          ),
         ),
-      ),
-    );
+        ),
+      );
   }
 }
