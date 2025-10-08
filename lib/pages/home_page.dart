@@ -38,7 +38,7 @@ class _HomePageState extends State<HomePage> {
                 SizedBox(height: 5),
                 Text(
                   "$formattedDate $date",
-                  style: TextStyle(
+                  style:TextStyle(
                     fontSize: 20,
                     fontWeight: FontWeight.w700,
                     color: Colors.grey,

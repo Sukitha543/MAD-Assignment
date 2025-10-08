@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:mad_assignment/models/cart.dart';
+import 'package:mad_assignment/pages/checkout_page.dart';
 import 'package:mad_assignment/widgets/cart_item_card.dart';
 import 'package:mad_assignment/widgets/checkout_summary_card.dart';
 
@@ -41,7 +42,11 @@ class _CartPageState extends State<CartPage> {
             CheckoutSummaryCard(
               totalPrice: cart.totalPrice,
               onCheckout: (){
-                  
+                  Navigator.of(context).push(
+                        MaterialPageRoute<void>(builder: (context) => CheckoutPage
+                        (items:cart.items,
+                        totalPrice: cart.totalPrice,),)
+                      ); 
               },
             ),
           ],

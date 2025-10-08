@@ -57,7 +57,7 @@ class CheckoutSummaryCard extends StatelessWidget {
             width: double.infinity,
             height: 40,
             child: ElevatedButton(
-              onPressed: () {},
+              onPressed: onCheckout,
               style: ElevatedButton.styleFrom(
                 backgroundColor: Colors.greenAccent.shade700,
                 shape: RoundedRectangleBorder(

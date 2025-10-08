@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'package:mad_assignment/pages/signin_page.dart';
 
 void main() {
@@ -20,9 +19,6 @@ class _MyAppState extends State<MyApp> {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-        theme: ThemeData(
-          textTheme: GoogleFonts.inderTextTheme(Theme.of(context).textTheme),
-          ),
         title: "TimeBridge",
         debugShowCheckedModeBanner: false,
         home: SigninPage(),
