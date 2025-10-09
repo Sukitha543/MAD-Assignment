@@ -27,6 +27,11 @@ class Cart {
   List<Product> get items => _items;
 
   // Step 8: get total price
-  double get totalPrice =>
-      _items.fold(0, (sum, item) => sum + item.price);
+  double get totalPrice => _items.fold(0, (sum, item) => sum + item.price);
+
+  // Step 9: clear the cart
+  void clearCart() {
+    _items.clear();
+  }
 }
+

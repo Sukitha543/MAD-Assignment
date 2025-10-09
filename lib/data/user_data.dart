@@ -6,6 +6,6 @@ User user = User(
   shippingAddress: "79/A, Niyadagala, Pannipititya",
   emailAddress: "suki@gmail.com",
   contactNumber: 0752323543,
-  username: "Suki",
+  username: "suki",
   password: "sukitha124"
   );

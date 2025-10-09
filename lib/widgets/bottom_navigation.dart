@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import 'package:mad_assignment/models/cart.dart';
 import 'package:mad_assignment/pages/cart_page.dart';
 import 'package:mad_assignment/pages/home_page.dart';
 import 'package:mad_assignment/pages/product_page.dart';
@@ -16,12 +17,11 @@ class BottomNavigation extends StatefulWidget {
 class _BottomNavigationState extends State<BottomNavigation> {
   int currentIndex = 0;
 
-  final List<Widget> pages =[
+  final List<Widget> pages = [
     HomePage(),
     ProductPage(),
     CartPage(),
     ProfilePage(),
-
   ];
 
   @override
@@ -29,48 +29,48 @@ class _BottomNavigationState extends State<BottomNavigation> {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.black,
-        title: const Text("TimeBridge",style: TextStyle(color: Colors.white),),
-        actions: [
-          IconButton(
-            onPressed:() {
-               Navigator.of(context).pushReplacement(
-                   MaterialPageRoute<void>(builder: (context) => SigninPage(),)
-                   );
-                }, 
-            icon: Icon(Icons.logout),
-            color: Colors.white,
-            ),
-        ],
+        title: const Text("TimeBridge", style: TextStyle(color: Colors.white)),
       ),
-      bottomNavigationBar:BottomNavigationBar(
-          selectedItemColor: Colors.black,
-          unselectedItemColor: Colors.blueGrey,
-          currentIndex: currentIndex,
-          onTap: (index) {
-            setState(() {
-              currentIndex = index;
-            });
-          } ,
-          items: [
-            BottomNavigationBarItem(
-            icon:Icon(Icons.home),
-            label: "Home",
-          ),
+      bottomNavigationBar: BottomNavigationBar(
+        selectedItemColor: Colors.black,
+        unselectedItemColor: Colors.blueGrey,
+        currentIndex: currentIndex,
+        onTap: (index) {
+          setState(() {
+            // Check if user is trying to open the Cart page (index == 2)
+            if (index == 2 && Cart.instance.items.isEmpty) {
+              // Show a snackbar if no products are added
+              ScaffoldMessenger.of(context).showSnackBar(
+                const SnackBar(
+                  content: Text(
+                    "Your cart is empty. Add some products first!",
+                    style: TextStyle(fontSize: 18),
+                  ),
+                  duration: Duration(seconds: 1),
+                  backgroundColor: Colors.red,
+                ),
+              );
+            } else {
+              setState(() {
+                currentIndex = index;
+              });
+            }
+          });
+        },
+        items: [
+          BottomNavigationBarItem(icon: Icon(Icons.home), label: "Home"),
+          BottomNavigationBarItem(icon: Icon(Icons.watch), label: "Products"),
           BottomNavigationBarItem(
-            icon:Icon(Icons.watch),
-            label: "Products",
-          ),
-          BottomNavigationBarItem(
-            icon:Icon(Icons.shopping_cart),
+            icon: Icon(Icons.shopping_cart),
             label: "Cart",
           ),
           BottomNavigationBarItem(
-            icon:Icon(Icons.account_box),
+            icon: Icon(Icons.account_box),
             label: "Profile",
           ),
-          ],
-        ),
-        body: pages[currentIndex],
+        ],
+      ),
+      body: pages[currentIndex],
     );
   }
 }

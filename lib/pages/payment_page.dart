@@ -44,7 +44,7 @@ class _PaymentPageState extends State<PaymentPage> {
         ),
         body: Center(
           child: SingleChildScrollView(
-            child: Center( 
+            child: Center(
               child: Container(
                 width: 350,
                 padding: const EdgeInsets.all(20),
@@ -96,8 +96,8 @@ class _PaymentPageState extends State<PaymentPage> {
                     TextField(
                       controller: expiryDateController,
                       readOnly: true,
-                      onTap: () { 
-                       _selectDate(context);
+                      onTap: () {
+                        _selectDate(context);
                       },
                       decoration: const InputDecoration(
                         labelText: "Expiry Date",
@@ -108,14 +108,44 @@ class _PaymentPageState extends State<PaymentPage> {
                     const SizedBox(height: 20),
                     // Confirm Payment Button
                     PaymentButton(
-                        onPressed: () {
+                      onPressed: () {
+                        if (nameController.text.isEmpty ||
+                            cardNumberController.text.isEmpty ||
+                            expiryDateController.text.isEmpty) {
                           ScaffoldMessenger.of(context).showSnackBar(
                             const SnackBar(
-                              content: Text("Payment Successful!"),
-                              backgroundColor: Colors.green,
+                              content: Text(
+                                "Please fill the Payment form",
+                                style: TextStyle(fontSize: 18),
+                              ),
+                              backgroundColor: Colors.red,
+                              duration: Duration(seconds: 1),
                             ),
                           );
-                        },
+                        } else if (cardNumberController.text.length < 16) {
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            const SnackBar(
+                              content: Text(
+                                "Card number must be at least 16 digits.", style: TextStyle(fontSize: 18),
+                              ),
+                              backgroundColor: Colors.red,
+                              duration: Duration(seconds: 1),
+                            ),
+                          );
+                        }
+                        else{
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            const SnackBar(
+                              content: Text(
+                                "Payment Sucessful", style: TextStyle(fontSize: 18),
+                              ),
+                              backgroundColor: Colors.green,
+                              duration: Duration(seconds: 1),
+                            ),
+                            
+                          );
+                        }
+                      },
                     ),
                   ],
                 ),
