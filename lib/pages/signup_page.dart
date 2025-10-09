@@ -34,6 +34,7 @@ class _SignupPageState extends State<SignupPage> {
         padding: const EdgeInsets.all(20),
         child: Center(
           child: SingleChildScrollView(
+            physics: BouncingScrollPhysics(),
             // makes it scrollable on small screens
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,

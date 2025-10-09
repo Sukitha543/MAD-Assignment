@@ -5,7 +5,7 @@ import 'package:mad_assignment/pages/cart_page.dart';
 import 'package:mad_assignment/pages/home_page.dart';
 import 'package:mad_assignment/pages/product_page.dart';
 import 'package:mad_assignment/pages/profile_page.dart';
-import 'package:mad_assignment/pages/signin_page.dart';
+
 
 class BottomNavigation extends StatefulWidget {
   const BottomNavigation({super.key});

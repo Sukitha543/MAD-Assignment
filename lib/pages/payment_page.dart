@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:mad_assignment/models/cart.dart';
 import 'package:mad_assignment/widgets/payment_button.dart';
 
 class PaymentPage extends StatefulWidget {
@@ -17,7 +18,7 @@ class _PaymentPageState extends State<PaymentPage> {
   final TextEditingController expiryDateController = TextEditingController();
 
   // Date Picker function
-  Future<void> _selectDate(BuildContext context) async {
+  Future<void> selectDate(BuildContext context) async {
     final DateTime? pickedDate = await showDatePicker(
       context: context,
       initialDate: DateTime.now(),
@@ -97,7 +98,7 @@ class _PaymentPageState extends State<PaymentPage> {
                       controller: expiryDateController,
                       readOnly: true,
                       onTap: () {
-                        _selectDate(context);
+                        selectDate(context);
                       },
                       decoration: const InputDecoration(
                         labelText: "Expiry Date",
@@ -134,6 +135,9 @@ class _PaymentPageState extends State<PaymentPage> {
                           );
                         }
                         else{
+                          nameController.clear();
+                          cardNumberController.clear();
+                          expiryDateController.clear();
                           ScaffoldMessenger.of(context).showSnackBar(
                             const SnackBar(
                               content: Text(

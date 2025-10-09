@@ -30,7 +30,14 @@ class _SigninPageState extends State<SigninPage> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                // Welcome Text
+                Center(
+                  child: SizedBox(
+                    width: 200,
+                    height: 100,
+                    child: Image.asset("assets/images/logo.png"),
+                  ),
+                ),
+                SizedBox(height: 20),
                 const Text(
                   "Hi, Welcome! 👋",
                   style: TextStyle(
@@ -82,7 +89,7 @@ class _SigninPageState extends State<SigninPage> {
                       );
                     } else if (enteredUsername == user.username &&
                         enteredPassword == user.password) {
-                      Navigator.of(context).push(
+                      Navigator.of(context).pushReplacement(
                         MaterialPageRoute<void>(
                           builder: (context) => BottomNavigation(),
                         ),
