@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:mad_assignment/models/product.dart';
+import 'package:mad_assignment/pages/payment_page.dart';
 import 'package:mad_assignment/widgets/checkout_total.dart';
 import 'package:mad_assignment/widgets/order_card.dart';
 import 'package:mad_assignment/widgets/order_now_button.dart';
@@ -26,34 +27,33 @@ class CheckoutPage extends StatelessWidget {
         ),
         body: Padding(
           padding: const EdgeInsets.all(10),
-          child: Column(
-            children: [
-              Text("Order Summary"),
-                Expanded(
-                  child: ListView.builder(
-                    itemCount: items.length,
-                    itemBuilder: (context, index) {
-                      final product = items[index];
-                      return OrderCard(items: product);
-                    },
-                  ),
-                ),
-              CheckoutTotal(totalPrice: totalPrice),
-              const SizedBox(height: 10),
-              OrderNowButton(onPressed:() {
-                 ScaffoldMessenger.of(context).showSnackBar(
-                    const SnackBar(
-                      content: Text("Order Confirmed!"),
-                      backgroundColor: Colors.green,
+            child: Column(
+              children: [
+                Text("Order Summary"),
+                  Expanded(
+                    child: ListView.builder(
+                      itemCount: items.length,
+                      itemBuilder: (context, index) {
+                        final product = items[index];
+                        return OrderCard(items: product);
+                      },
                     ),
-                 );
-              }, 
+                  ),
+                CheckoutTotal(totalPrice: totalPrice),
+                const SizedBox(height: 10),
+                OrderNowButton(onPressed:() {
+                     Navigator.of(context).push(
+                        MaterialPageRoute<void>(builder: (context) => PaymentPage(
+                        totalPrice:totalPrice),
+                      ),
+                   );
+                }, 
+              ),
+              const SizedBox(height: 10),
+              ],
             ),
-            const SizedBox(height: 10),
-            ],
           ),
         ),
-      ),
-    );
+      );
   }
 }
