@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 import 'package:mad_assignment/pages/signin_page.dart';
 import 'package:mad_assignment/widgets/custom_button.dart';
@@ -39,9 +40,9 @@ class _SignupPageState extends State<SignupPage> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                const Text(
+                 Text(
                   "Sign Up",
-                  style: TextStyle(
+                  style: GoogleFonts.poppins(
                     fontSize: 30,
                     color: Colors.black,
                     fontWeight: FontWeight.bold,

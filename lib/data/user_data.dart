@@ -7,5 +7,5 @@ User user = User(
   emailAddress: "suki@gmail.com",
   contactNumber: 0752323543,
   username: "suki",
-  password: "sukitha124"
+  password: "suki123"
   );

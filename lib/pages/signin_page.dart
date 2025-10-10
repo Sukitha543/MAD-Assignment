@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 import 'package:mad_assignment/data/user_data.dart';
 import 'package:mad_assignment/pages/signup_page.dart';
@@ -38,9 +39,9 @@ class _SigninPageState extends State<SigninPage> {
                   ),
                 ),
                 SizedBox(height: 20),
-                const Text(
+                Text(
                   "Hi, Welcome! 👋",
-                  style: TextStyle(
+                  style:GoogleFonts.poppins(
                     fontSize: 28,
                     fontWeight: FontWeight.bold,
                     color: Colors.black,
@@ -109,7 +110,7 @@ class _SigninPageState extends State<SigninPage> {
                   normalText: "Don't have an account?",
                   linkText: "Sign Up",
                   onTap: () {
-                    Navigator.of(context).pushReplacement(
+                    Navigator.of(context).push(
                       MaterialPageRoute<void>(
                         builder: (context) => SignupPage(),
                       ),

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:mad_assignment/data/user_data.dart';
 
 class ProfileCard extends StatelessWidget {
@@ -30,9 +31,9 @@ class ProfileCard extends StatelessWidget {
         children: [
               Text(
               "Account Details",
-              style: TextStyle(
+              style: GoogleFonts.poppins(
               fontSize:20,
-              fontWeight: FontWeight.bold,
+              fontWeight: FontWeight.w500,
               color: Colors.blueGrey[800],
               )
               ),

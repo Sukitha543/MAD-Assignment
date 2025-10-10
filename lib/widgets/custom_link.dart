@@ -19,7 +19,7 @@ class CustomLinkText extends StatelessWidget {
       children: [
         Text(
           normalText,
-          style: const TextStyle(color: Colors.black87, fontSize: 14),
+          style: const TextStyle(color: Colors.black87, fontSize: 18),
         ),
         GestureDetector(
           onTap: onTap,
@@ -28,7 +28,7 @@ class CustomLinkText extends StatelessWidget {
             style: const TextStyle(
               color: Colors.black,
               fontWeight: FontWeight.bold,
-              fontSize: 14,
+              fontSize: 18,
               decoration: TextDecoration.underline,
             ),
           ),

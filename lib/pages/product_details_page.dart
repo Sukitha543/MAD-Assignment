@@ -13,11 +13,12 @@ class ProductDetailsPage extends StatelessWidget {
     return SafeArea(
       child: Scaffold(
         backgroundColor: Colors.white,
-        appBar: AppBar(title: Text("Product details"),
-        centerTitle: true,
-        backgroundColor: Colors.black, 
-        foregroundColor: Colors.white,
-        elevation: 2,
+        appBar: AppBar(
+          title: Text("Product details"),
+          centerTitle: true,
+          backgroundColor: Colors.black,
+          foregroundColor: Colors.white,
+          elevation: 2,
         ),
         body: SingleChildScrollView(
           physics: BouncingScrollPhysics(),
@@ -25,7 +26,7 @@ class ProductDetailsPage extends StatelessWidget {
             padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 16),
             child: Column(
               children: [
-                SizedBox(height: 10,),
+                SizedBox(height: 10),
                 ClipRRect(
                   child: Image.asset(
                     product.image,
@@ -39,7 +40,10 @@ class ProductDetailsPage extends StatelessWidget {
                   children: [
                     Text(
                       "${product.brand} - ${product.model}",
-                      style: TextStyle(fontSize: 25, fontWeight: FontWeight.bold),
+                      style: TextStyle(
+                        fontSize: 25,
+                        fontWeight: FontWeight.bold,
+                      ),
                     ),
                     Text(
                       "\$${product.price.toStringAsFixed(2)}",
@@ -47,20 +51,28 @@ class ProductDetailsPage extends StatelessWidget {
                     ),
                   ],
                 ),
-                SizedBox(height: 10,),
+                SizedBox(height: 10),
                 Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    SpecCard(product: product,),
-                    SizedBox(height: 10,),
-                    AddToCartButton(onPressed: () {
-                       Cart.instance.addItem(product);
+                    SpecCard(product: product),
+                    SizedBox(height: 10),
+                    AddToCartButton(
+                      onPressed: () {
+                        Cart.instance.addItem(product);
                         ScaffoldMessenger.of(context).showSnackBar(
-                          SnackBar(content: Text("${product.model} added to cart")),
+                          SnackBar(
+                            content: Text(
+                              "${product.model} added to cart",
+                              style: TextStyle(fontSize: 18),
+                            ),
+                            backgroundColor: Colors.green,
+                          ),
                         );
-                    },)
+                      },
+                    ),
                   ],
-                )
+                ),
               ],
             ),
           ),

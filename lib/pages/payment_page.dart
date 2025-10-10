@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-import 'package:mad_assignment/models/cart.dart';
 import 'package:mad_assignment/widgets/payment_button.dart';
 
 class PaymentPage extends StatefulWidget {

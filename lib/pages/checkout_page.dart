@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:mad_assignment/models/product.dart';
 import 'package:mad_assignment/pages/payment_page.dart';
 import 'package:mad_assignment/widgets/checkout_total.dart';
@@ -27,33 +28,40 @@ class CheckoutPage extends StatelessWidget {
         ),
         body: Padding(
           padding: const EdgeInsets.all(10),
-            child: Column(
-              children: [
-                Text("Order Summary"),
-                  Expanded(
-                    child: ListView.builder(
-                      itemCount: items.length,
-                      itemBuilder: (context, index) {
-                        final product = items[index];
-                        return OrderCard(items: product);
-                      },
+          child: Column(
+            children: [
+              Text(
+                "Order Summary",
+                style: GoogleFonts.poppins(
+                  fontSize: 18,
+                  fontWeight: FontWeight.w500,
+                ),
+              ),
+              Expanded(
+                child: ListView.builder(
+                  itemCount: items.length,
+                  itemBuilder: (context, index) {
+                    final product = items[index];
+                    return OrderCard(items: product);
+                  },
+                ),
+              ),
+              CheckoutTotal(totalPrice: totalPrice),
+              const SizedBox(height: 10),
+              OrderNowButton(
+                onPressed: () {
+                  Navigator.of(context).push(
+                    MaterialPageRoute<void>(
+                      builder: (context) => PaymentPage(totalPrice: totalPrice),
                     ),
-                  ),
-                CheckoutTotal(totalPrice: totalPrice),
-                const SizedBox(height: 10),
-                OrderNowButton(onPressed:() {
-                     Navigator.of(context).push(
-                        MaterialPageRoute<void>(builder: (context) => PaymentPage(
-                        totalPrice:totalPrice),
-                      ),
-                   );
-                }, 
+                  );
+                },
               ),
               const SizedBox(height: 10),
-              ],
-            ),
+            ],
           ),
         ),
-      );
+      ),
+    );
   }
 }
