@@ -1,31 +1,43 @@
-
-class Product{
+class Product {
+  final int id;
   final String brand;
   final String model;
-  final String code;
   final String diameter;
   final String type;
   final String material;
   final String strap;
-  final String waterResistence;
-  final String calibre;
+  final String waterResistance;
+  final String caliber;
   final double price;
   final String image;
 
-
- Product({
+  Product({
+    required this.id,
     required this.brand,
     required this.model,
-    required this.code,
     required this.diameter,
     required this.type,
     required this.material,
     required this.strap,
-    required this.waterResistence,
-    required this.calibre,
+    required this.waterResistance,
+    required this.caliber,
     required this.price,
     required this.image,
   });
 
+  factory Product.fromJson(Map<String, dynamic> json) {
+    return Product(
+      id: json['id'],
+      brand: json['brand'],
+      model: json['model'],
+      diameter: json['diameter'],
+      type: json['type'],
+      material: json['material'],
+      strap: json['strap'],
+      waterResistance: json['water_resistance'],
+      caliber: json['caliber'],
+      price: double.parse(json['price'].toString()),
+      image: json['image'] ?? '',
+    );
+  }
 }
-

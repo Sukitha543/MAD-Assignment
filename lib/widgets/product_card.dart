@@ -5,18 +5,15 @@ class ProductCard extends StatelessWidget {
   final Product product;
   final VoidCallback onTap;
 
-  const ProductCard(
-    {super.key,
-     required this.product,
-      required this.onTap});
+  const ProductCard({super.key, required this.product, required this.onTap});
 
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-          onTap: onTap,
-          child: Card(
-            color: Colors.white,
-             margin: const EdgeInsets.all(8),
+      onTap: onTap,
+      child: Card(
+        color: Colors.white,
+        margin: const EdgeInsets.all(8),
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
         child: Padding(
           padding: const EdgeInsets.all(12),
@@ -29,10 +26,31 @@ class ProductCard extends StatelessWidget {
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(10),
                   color: Colors.grey[200],
-                  image: DecorationImage(
-                    image: AssetImage(product.image),
-                    fit: BoxFit.cover,
-                  ),
+                ),
+                child: ClipRRect(
+                  borderRadius: BorderRadius.circular(10),
+                  child: product.image.startsWith('https')
+                      ? Image.network(
+                          product.image,
+                          fit: BoxFit.cover,
+                          errorBuilder: (context, error, stackTrace) {
+                            return const Icon(
+                              Icons.broken_image,
+                              size: 50,
+                              color: Colors.grey,
+                            );
+                          },
+                        )
+                      : Image.asset(
+                          product.image,
+                          fit: BoxFit.cover,
+                          errorBuilder: (context, error, stackTrace) =>
+                              const Icon(
+                                Icons.watch,
+                                size: 50,
+                                color: Colors.grey,
+                              ),
+                        ),
                 ),
               ),
               const SizedBox(width: 16),
@@ -42,23 +60,32 @@ class ProductCard extends StatelessWidget {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text(product.brand,
-                        style: const TextStyle(
-                            fontSize: 20, fontWeight: FontWeight.bold)),
-                    Text(product.model,
-                        style: const TextStyle(
-                            fontSize: 20, color: Colors.black54)),
+                    Text(
+                      product.brand,
+                      style: const TextStyle(
+                        fontSize: 20,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                    Text(
+                      product.model,
+                      style: const TextStyle(
+                        fontSize: 20,
+                        color: Colors.black54,
+                      ),
+                    ),
                     const SizedBox(height: 8),
-                    Text("\$${product.price.toStringAsFixed(2)}",
-                        style: const TextStyle(
-                            fontSize: 20, color: Colors.black)),
+                    Text(
+                      "\$${product.price.toStringAsFixed(2)}",
+                      style: const TextStyle(fontSize: 20, color: Colors.black),
+                    ),
                   ],
                 ),
               ),
             ],
           ),
-    ),
-    ),
+        ),
+      ),
     );
   }
 }

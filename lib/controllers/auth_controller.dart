@@ -79,6 +79,7 @@ class AuthController with ChangeNotifier {
   }
 
   Future<void> _saveToken(String token) async {
+    print('AuthController: Saving token: $token');
     await storage.write(key: 'token', value: token);
   }
 

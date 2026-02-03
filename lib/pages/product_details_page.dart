@@ -28,12 +28,23 @@ class ProductDetailsPage extends StatelessWidget {
               children: [
                 SizedBox(height: 10),
                 ClipRRect(
-                  child: Image.asset(
-                    product.image,
-                    width: double.infinity,
-                    height: 250,
-                    fit: BoxFit.cover,
-                  ),
+                  child: product.image.startsWith('http')
+                      ? Image.network(
+                          product.image,
+                          width: double.infinity,
+                          height: 250,
+                          fit: BoxFit.cover,
+                          errorBuilder: (context, error, stackTrace) =>
+                              const Icon(Icons.broken_image, size: 100),
+                        )
+                      : Image.asset(
+                          product.image,
+                          width: double.infinity,
+                          height: 250,
+                          fit: BoxFit.cover,
+                          errorBuilder: (context, error, stackTrace) =>
+                              const Icon(Icons.watch, size: 100),
+                        ),
                 ),
                 SizedBox(height: 20),
                 Column(

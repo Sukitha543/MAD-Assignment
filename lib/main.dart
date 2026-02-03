@@ -1,12 +1,20 @@
+//PACKAGES
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+//CONTROLLERS
 import 'controllers/auth_controller.dart';
+import 'controllers/product_controller.dart';
+//WIDGETS
 import 'package:mad_assignment/pages/signin_page.dart';
 
 void main() {
   runApp(
     MultiProvider(
-      providers: [ChangeNotifierProvider(create: (_) => AuthController())],
+      providers: [
+        ChangeNotifierProvider(create: (_) => AuthController()),
+        ChangeNotifierProvider(create: (_) => ProductController()),
+      ],
+
       child: MyApp(),
     ),
   );
