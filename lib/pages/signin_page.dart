@@ -1,7 +1,10 @@
+//PACKAGES
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-
-import 'package:mad_assignment/data/user_data.dart';
+import 'package:provider/provider.dart';
+//CONTROLLERS
+import 'package:mad_assignment/controllers/auth_controller.dart';
+//WIDGETS
 import 'package:mad_assignment/pages/signup_page.dart';
 import 'package:mad_assignment/widgets/bottom_navigation.dart';
 import 'package:mad_assignment/widgets/custom_button.dart';
@@ -16,11 +19,56 @@ class SigninPage extends StatefulWidget {
 }
 
 class _SigninPageState extends State<SigninPage> {
-  final TextEditingController username = TextEditingController();
-  final TextEditingController password = TextEditingController();
+  final TextEditingController emailController = TextEditingController();
+  final TextEditingController passwordController = TextEditingController();
+
+  Future<void> _handleLogin() async {
+    final authController = Provider.of<AuthController>(context, listen: false);
+
+    String email = emailController.text.trim();
+    String password = passwordController.text.trim();
+
+    if (email.isEmpty || password.isEmpty) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text(
+            "Please enter both email and password",
+            style: TextStyle(fontSize: 18),
+          ),
+          backgroundColor: Colors.red,
+        ),
+      );
+      return;
+    }
+
+    bool success = await authController.login(email, password);
+
+    if (!mounted) return;
+
+    if (success) {
+      Navigator.of(context).pushReplacement(
+        MaterialPageRoute<void>(builder: (context) => BottomNavigation()),
+      );
+    } else {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text(
+            authController.errorMessage ?? "Invalid email or password",
+            style: const TextStyle(fontSize: 18),
+          ),
+          backgroundColor: Colors.red,
+        ),
+      );
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
+    // Listen to loading state
+    final isLoading = context.select<AuthController, bool>(
+      (controller) => controller.isLoading,
+    );
+
     return Scaffold(
       backgroundColor: Colors.white,
       body: Padding(
@@ -41,7 +89,7 @@ class _SigninPageState extends State<SigninPage> {
                 SizedBox(height: 20),
                 Text(
                   "Hi, Welcome! 👋",
-                  style:GoogleFonts.poppins(
+                  style: GoogleFonts.poppins(
                     fontSize: 28,
                     fontWeight: FontWeight.bold,
                     color: Colors.black,
@@ -55,11 +103,11 @@ class _SigninPageState extends State<SigninPage> {
                 ),
                 const SizedBox(height: 40),
 
-                // Username Field
+                // Email Field
                 CustomTextField(
-                  label: "Username",
-                  hint: "Enter Your Username",
-                  controller: username,
+                  label: "Email",
+                  hint: "Enter Your Email",
+                  controller: emailController,
                 ),
                 const SizedBox(height: 20),
 
@@ -68,43 +116,14 @@ class _SigninPageState extends State<SigninPage> {
                   label: "Password",
                   hint: "Enter Your Password",
                   obsecureText: true,
-                  controller: password,
+                  controller: passwordController,
                 ),
                 const SizedBox(height: 30),
 
                 // Login Button
-                CustomButton(
-                  text: "Sign in",
-                  onPressed: () {
-                    String enteredUsername = username.text.trim();
-                    String enteredPassword = password.text.trim();
-
-                    if (enteredUsername.isEmpty || enteredPassword.isEmpty) {
-                      ScaffoldMessenger.of(context).showSnackBar(
-                        const SnackBar(
-                          content: Text(
-                            "Please enter both username and password",style: TextStyle(fontSize: 18),
-                          ),
-                          backgroundColor: Colors.red,
-                        ),
-                      );
-                    } else if (enteredUsername == user.username &&
-                        enteredPassword == user.password) {
-                      Navigator.of(context).pushReplacement(
-                        MaterialPageRoute<void>(
-                          builder: (context) => BottomNavigation(),
-                        ),
-                      );
-                    } else {
-                      ScaffoldMessenger.of(context).showSnackBar(
-                        const SnackBar(
-                          content: Text("Invalid username or password", style: TextStyle(fontSize: 18),),
-                          backgroundColor: Colors.red,
-                        ),
-                      );
-                    }
-                  },
-                ),
+                isLoading
+                    ? const Center(child: CircularProgressIndicator())
+                    : CustomButton(text: "Sign in", onPressed: _handleLogin),
                 const SizedBox(height: 20),
                 CustomLinkText(
                   normalText: "Don't have an account?",

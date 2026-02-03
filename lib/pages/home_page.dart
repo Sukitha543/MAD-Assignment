@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
-import 'package:mad_assignment/data/user_data.dart';
-import 'package:mad_assignment/widgets/brand_card.dart';
+import 'package:provider/provider.dart';
+import 'package:mad_assignment/controllers/auth_controller.dart';
+import 'package:mad_assignment/widgets/brand_card.dart'; // Retained for BrandCard usage
 import 'package:mad_assignment/widgets/contact_card.dart';
 
 class HomePage extends StatefulWidget {
@@ -17,11 +18,11 @@ class _HomePageState extends State<HomePage> {
   final DateFormat formatter = DateFormat('EEEE, MMMM');
   final DateFormat dayformat = DateFormat("dd");
 
-  //User Data
-  final userData = user;
-
   @override
   Widget build(BuildContext context) {
+    final authController = Provider.of<AuthController>(context);
+    final user = authController.user;
+
     DateTime now = DateTime.now();
     String formattedDate = formatter.format(now);
     String date = dayformat.format(now);
@@ -75,7 +76,7 @@ class _HomePageState extends State<HomePage> {
                   ),
                 ),
                 Text(
-                  "Hello, ${userData.username}",
+                  "Hello, ${user?.name ?? "Guest"}",
                   style: TextStyle(
                     fontSize: 30,
                     fontWeight: FontWeight.bold,
@@ -109,15 +110,16 @@ class _HomePageState extends State<HomePage> {
                 Center(
                   child: Text(
                     "Our Brands",
-                    style: GoogleFonts.poppins(fontSize: 35, fontWeight: FontWeight.w500),
+                    style: GoogleFonts.poppins(
+                      fontSize: 35,
+                      fontWeight: FontWeight.w500,
+                    ),
                   ),
                 ),
                 SizedBox(height: 15),
                 Center(child: brandsLayout),
                 SizedBox(height: 30),
-                Center(
-                  child: ContactCard(),
-                ),
+                Center(child: ContactCard()),
               ],
             ),
           ),

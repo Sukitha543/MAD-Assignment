@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:provider/provider.dart';
 
+import 'package:mad_assignment/controllers/auth_controller.dart';
 import 'package:mad_assignment/pages/signin_page.dart';
 import 'package:mad_assignment/widgets/custom_button.dart';
 import 'package:mad_assignment/widgets/custom_link.dart';
@@ -14,17 +16,103 @@ class SignupPage extends StatefulWidget {
 }
 
 class _SignupPageState extends State<SignupPage> {
-  final TextEditingController firstName = TextEditingController();
-  final TextEditingController lastName = TextEditingController();
-  final TextEditingController emailAddress = TextEditingController();
-  final TextEditingController shippingAddress = TextEditingController();
-  final TextEditingController contactNumber = TextEditingController();
-  final TextEditingController username = TextEditingController();
-  final TextEditingController password = TextEditingController();
-  final TextEditingController confirmPassword = TextEditingController();
+  final TextEditingController nameController = TextEditingController();
+  final TextEditingController emailController = TextEditingController();
+  final TextEditingController passwordController = TextEditingController();
+  final TextEditingController confirmPasswordController =
+      TextEditingController();
+
+  Future<void> _handleSignup() async {
+    final authController = Provider.of<AuthController>(context, listen: false);
+
+    String name = nameController.text.trim();
+    String email = emailController.text.trim();
+    String password = passwordController.text.trim();
+    String confirmPassword = confirmPasswordController.text.trim();
+
+    if (name.isEmpty ||
+        email.isEmpty ||
+        password.isEmpty ||
+        confirmPassword.isEmpty) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text(
+            "Please fill in all fields",
+            style: TextStyle(fontSize: 18),
+          ),
+          backgroundColor: Colors.red,
+        ),
+      );
+      return;
+    }
+
+    if (!RegExp(r'^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$').hasMatch(email)) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text(
+            "Please enter a valid email address",
+            style: TextStyle(fontSize: 18),
+          ),
+          backgroundColor: Colors.red,
+        ),
+      );
+      return;
+    }
+
+    if (password != confirmPassword) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text(
+            "Passwords do not match",
+            style: TextStyle(fontSize: 18),
+          ),
+          backgroundColor: Colors.red,
+        ),
+      );
+      return;
+    }
+
+    bool success = await authController.register(
+      name: name,
+      email: email,
+      password: password,
+    );
+
+    if (!mounted) return;
+
+    if (success) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text(
+            "Registered Successfully",
+            style: TextStyle(fontSize: 18),
+          ),
+          backgroundColor: Colors.green,
+        ),
+      );
+      Navigator.of(context).pushReplacement(
+        MaterialPageRoute<void>(builder: (context) => SigninPage()),
+      );
+    } else {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text(
+            authController.errorMessage ?? "Registration failed",
+            style: const TextStyle(fontSize: 18),
+          ),
+          backgroundColor: Colors.red,
+        ),
+      );
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
+    // Listen to loading state
+    final isLoading = context.select<AuthController, bool>(
+      (controller) => controller.isLoading,
+    );
+
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.black,
@@ -40,7 +128,7 @@ class _SignupPageState extends State<SignupPage> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                 Text(
+                Text(
                   "Sign Up",
                   style: GoogleFonts.poppins(
                     fontSize: 30,
@@ -51,122 +139,37 @@ class _SignupPageState extends State<SignupPage> {
                 const SizedBox(height: 40),
 
                 CustomTextField(
-                  label: "First Name",
-                  hint: "Jhon",
-                  controller: firstName,
-                ),
-                const SizedBox(height: 20),
-
-                CustomTextField(
-                  label: "Last Name",
-                  hint: "Doe",
-                  controller: lastName,
+                  label: "Name",
+                  hint: "John Doe",
+                  controller: nameController,
                 ),
                 const SizedBox(height: 20),
 
                 CustomTextField(
                   label: "Email Address",
-                  hint: "jhondoe@gmail.com",
-                  controller: emailAddress,
+                  hint: "johndoe@gmail.com",
+                  controller: emailController,
                 ),
-                const SizedBox(height: 20),
-
-                CustomTextField(
-                  label: "Shipping Address",
-                  hint: "Colombo,Sri Lanka",
-                  controller: shippingAddress,
-                ),
-                const SizedBox(height: 20),
-
-                CustomTextField(
-                  label: "Comtact Number",
-                  controller: contactNumber,
-                ),
-                const SizedBox(height: 20),
-
-                CustomTextField(label: "Username", controller: username),
                 const SizedBox(height: 20),
 
                 CustomTextField(
                   label: "Password",
                   obsecureText: true,
-                  controller: password,
+                  controller: passwordController,
                 ),
                 const SizedBox(height: 20),
 
                 CustomTextField(
                   label: "Confirm Password",
                   obsecureText: true,
-                  controller: confirmPassword,
+                  controller: confirmPasswordController,
                 ),
                 const SizedBox(height: 20),
 
                 // Register Button
-                CustomButton(
-                  text: "Sign up",
-                  onPressed: () {
-                    String fName = firstName.text.trim();
-                    String lName = lastName.text.trim();
-                    String email = emailAddress.text.trim();
-                    String address = shippingAddress.text.trim();
-                    String contact = contactNumber.text.trim();
-                    String user = username.text.trim();
-                    String pass = password.text.trim();
-                    String confirmPass = confirmPassword.text.trim();
-
-                    if (fName.isEmpty ||
-                        lName.isEmpty ||
-                        email.isEmpty ||
-                        address.isEmpty ||
-                        contact.isEmpty ||
-                        user.isEmpty ||
-                        pass.isEmpty ||
-                        confirmPass.isEmpty) {
-                      ScaffoldMessenger.of(context).showSnackBar(
-                        const SnackBar(
-                          content: Text("Please fill in all fields", style: TextStyle(fontSize: 18)),
-                          backgroundColor: Colors.red,
-                        ),
-                      );
-                    } else if (!RegExp(
-                      r'^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$',
-                    ).hasMatch(email)) {
-                      ScaffoldMessenger.of(context).showSnackBar(
-                        const SnackBar(
-                          content: Text("Please enter a valid email address",style: TextStyle(fontSize: 18)),
-                          backgroundColor: Colors.red,
-                        ),
-                      );
-                    } else if (pass != confirmPass) {
-                      ScaffoldMessenger.of(context).showSnackBar(
-                        const SnackBar(
-                          content: Text("Passwords do not match",style: TextStyle(fontSize: 18)),
-                          backgroundColor: Colors.red,
-                        ),
-                      );
-                    } else if (contact.length < 9) {
-                      ScaffoldMessenger.of(context).showSnackBar(
-                        const SnackBar(
-                          content: Text("Please enter a valid contact number",style: TextStyle(fontSize: 18)),
-                          backgroundColor: Colors.red,
-                        ),
-                      );
-                    }
-                    else{
-                    ScaffoldMessenger.of(context).showSnackBar(
-                        const SnackBar(
-                          content: Text("Registered Sucessfully",style: TextStyle(fontSize: 18)),
-                          backgroundColor: Colors.green,
-                        ),
-                      );
-                    Navigator.of(context).pushReplacement(
-                      MaterialPageRoute<void>(
-                        builder: (context) => SigninPage(),
-                      ),
-                    );
-                    }
-                  },
-                ),
+                isLoading
+                    ? const Center(child: CircularProgressIndicator())
+                    : CustomButton(text: "Sign up", onPressed: _handleSignup),
                 const SizedBox(height: 20),
                 CustomLinkText(
                   normalText: "Already Registered?",
