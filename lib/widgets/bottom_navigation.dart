@@ -1,11 +1,12 @@
 import 'package:flutter/material.dart';
 
-import 'package:mad_assignment/models/cart.dart';
+import 'package:provider/provider.dart';
+
+import 'package:mad_assignment/controllers/cart_controller.dart';
 import 'package:mad_assignment/pages/cart_page.dart';
 import 'package:mad_assignment/pages/home_page.dart';
 import 'package:mad_assignment/pages/product_page.dart';
 import 'package:mad_assignment/pages/profile_page.dart';
-
 
 class BottomNavigation extends StatefulWidget {
   const BottomNavigation({super.key});
@@ -29,7 +30,7 @@ class _BottomNavigationState extends State<BottomNavigation> {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.black,
-        title: const Text("TimeBridge", style: TextStyle(color: Colors.white)),
+        title: const Text("TIMEBRIDGE", style: TextStyle(color: Colors.white)),
       ),
       bottomNavigationBar: BottomNavigationBar(
         selectedItemColor: Colors.black,
@@ -38,7 +39,11 @@ class _BottomNavigationState extends State<BottomNavigation> {
         onTap: (index) {
           setState(() {
             // Check if user is trying to open the Cart page (index == 2)
-            if (index == 2 && Cart.instance.items.isEmpty) {
+            if (index == 2 &&
+                Provider.of<CartController>(
+                  context,
+                  listen: false,
+                ).cartItems.isEmpty) {
               // Show a snackbar if no products are added
               ScaffoldMessenger.of(context).showSnackBar(
                 const SnackBar(

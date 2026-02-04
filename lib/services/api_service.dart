@@ -17,18 +17,12 @@ class ApiService {
       if (token != null) 'Authorization': 'Bearer $token',
     };
 
-    print('POST Request to: $url'); // DEBUG
-    print('Payload: ${jsonEncode(data)}'); // DEBUG
-
     try {
       final response = await http.post(
         url,
         headers: headers,
         body: jsonEncode(data),
       );
-
-      print('Response Status: ${response.statusCode}'); // DEBUG
-      print('Response Body: ${response.body}'); // DEBUG
 
       if (response.statusCode == 200 || response.statusCode == 201) {
         return jsonDecode(response.body);
@@ -44,7 +38,6 @@ class ApiService {
         }
       }
     } catch (e) {
-      print('API Post Error: $e'); // DEBUG
       rethrow;
     }
   }
@@ -52,8 +45,6 @@ class ApiService {
   //GET REQUEST
   static Future<List<dynamic>> get(String endpoint, {String? token}) async {
     final url = Uri.parse('$baseUrl/$endpoint');
-
-    print('Fetching from: $url'); // DEBUG
 
     final headers = {
       'Content-Type': 'application/json',
@@ -63,8 +54,6 @@ class ApiService {
 
     try {
       final response = await http.get(url, headers: headers);
-      print('Response Status: ${response.statusCode}'); // DEBUG
-      print('Response Body: ${response.body}'); // DEBUG
 
       if (response.statusCode == 200) {
         if (response.body.trim().startsWith('<')) {
@@ -87,7 +76,73 @@ class ApiService {
         }
       }
     } catch (e) {
-      print('API Error: $e'); // DEBUG
+      rethrow;
+    }
+  }
+
+  //GET REQUEST (Returns full response body)
+  static Future<dynamic> getFull(String endpoint, {String? token}) async {
+    final url = Uri.parse('$baseUrl/$endpoint');
+
+    final headers = {
+      'Content-Type': 'application/json',
+      'Accept': 'application/json',
+      if (token != null) 'Authorization': 'Bearer $token',
+    };
+
+    try {
+      final response = await http.get(url, headers: headers);
+
+      if (response.statusCode == 200) {
+        if (response.body.trim().startsWith('<')) {
+          throw Exception(
+            'Server returned HTML instead of JSON. You might need to log in again.',
+          );
+        }
+        return jsonDecode(response.body);
+      } else {
+        try {
+          final errorBody = jsonDecode(response.body);
+          throw Exception(
+            errorBody['message'] ??
+                'Failed to load data: ${response.statusCode}',
+          );
+        } catch (_) {
+          throw Exception('Failed to load data: ${response.statusCode}');
+        }
+      }
+    } catch (e) {
+      rethrow;
+    }
+  }
+
+  // DELETE REQUEST
+  static Future<Map<String, dynamic>> delete(
+    String endpoint, {
+    String? token,
+  }) async {
+    final url = Uri.parse('$baseUrl/$endpoint');
+    final headers = {
+      'Content-Type': 'application/json',
+      'Accept': 'application/json',
+      if (token != null) 'Authorization': 'Bearer $token',
+    };
+
+    try {
+      final response = await http.delete(url, headers: headers);
+
+      if (response.statusCode == 200 || response.statusCode == 204) {
+        if (response.body.isEmpty) return {};
+        return jsonDecode(response.body);
+      } else {
+        try {
+          final errorBody = jsonDecode(response.body);
+          throw Exception(errorBody['message'] ?? 'Delete failed');
+        } catch (_) {
+          throw Exception('Delete failed: ${response.statusCode}');
+        }
+      }
+    } catch (e) {
       rethrow;
     }
   }

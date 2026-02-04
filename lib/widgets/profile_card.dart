@@ -1,22 +1,24 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-//
+import 'package:provider/provider.dart';
+import '../controllers/auth_controller.dart';
 
 class ProfileCard extends StatelessWidget {
   const ProfileCard({super.key});
 
   @override
   Widget build(BuildContext context) {
-    //final userData = user;
+    final authController = Provider.of<AuthController>(context);
+    final user = authController.user;
 
     return Container(
       width: 320,
-      margin: EdgeInsets.symmetric(vertical: 20),
-      padding: EdgeInsets.all(10),
+      margin: const EdgeInsets.symmetric(vertical: 20),
+      padding: const EdgeInsets.all(10),
       decoration: BoxDecoration(
         color: Colors.white,
         borderRadius: BorderRadius.circular(10),
-        boxShadow: [
+        boxShadow: const [
           BoxShadow(
             color: Colors.black12,
             blurRadius: 25,
@@ -35,36 +37,43 @@ class ProfileCard extends StatelessWidget {
               color: Colors.blueGrey[800],
             ),
           ),
-          SizedBox(height: 20),
+          const SizedBox(height: 20),
           Row(
             children: [
-              Icon(Icons.account_box, color: Colors.black, size: 28),
-              SizedBox(width: 10),
-              //Text("${userData.firstName} ${userData.lastName}"),
+              const Icon(Icons.account_box, color: Colors.black, size: 28),
+              const SizedBox(width: 10),
+              Text(
+                user?.name ?? "Guest User",
+                style: const TextStyle(fontSize: 16),
+              ),
             ],
           ),
-          SizedBox(height: 20),
+          const SizedBox(height: 20),
           Row(
             children: [
-              Icon(Icons.local_shipping, color: Colors.black, size: 28),
-              SizedBox(width: 10),
-              //Text(userData.shippingAddress),
+              const Icon(Icons.email, color: Colors.black, size: 28),
+              const SizedBox(width: 10),
+              Text(
+                user?.email ?? "No Email",
+                style: const TextStyle(fontSize: 16),
+              ),
             ],
           ),
-          SizedBox(height: 20),
+          // Placeholder for missing fields in User model
+          const SizedBox(height: 20),
           Row(
             children: [
-              Icon(Icons.email, color: Colors.black, size: 28),
-              SizedBox(width: 10),
-              //Text(userData.emailAddress),
+              const Icon(Icons.local_shipping, color: Colors.black, size: 28),
+              const SizedBox(width: 10),
+              const Text("Address not set"),
             ],
           ),
-          SizedBox(height: 20),
+          const SizedBox(height: 20),
           Row(
             children: [
-              Icon(Icons.call, color: Colors.black, size: 28),
-              SizedBox(width: 10),
-              //Text("${userData.contactNumber}"),
+              const Icon(Icons.call, color: Colors.black, size: 28),
+              const SizedBox(width: 10),
+              const Text("No contact number"),
             ],
           ),
         ],

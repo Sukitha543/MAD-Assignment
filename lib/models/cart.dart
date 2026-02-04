@@ -1,36 +1,17 @@
-import 'package:mad_assignment/models/product.dart';
+import 'product.dart';
 
-class Cart {
-  //  private constructor
-  Cart._privateConstructor();
+class CartItem {
+  final int id;
+  final int quantity;
+  final Product product;
 
-  
-  static final Cart _instance = Cart._privateConstructor();
+  CartItem({required this.id, required this.quantity, required this.product});
 
-  static Cart get instance => _instance;
-
-  // list to hold added products
-  final List<Product> _items = [];
-
-  // add product
-  void addItem(Product product) {
-    _items.add(product);
-  }
-
-  // remove product
-  void removeItem(Product product) {
-    _items.remove(product);
-  }
-
-  //  get all items
-  List<Product> get items => _items;
-
-  // get total price
-  double get totalPrice => _items.fold(0, (sum, item) => sum + item.price);
-
-  //  clear the cart
-  void clearCart() {
-    _items.clear();
+  factory CartItem.fromJson(Map<String, dynamic> json) {
+    return CartItem(
+      id: json['id'],
+      quantity: json['quantity'],
+      product: Product.fromJson(json['product']),
+    );
   }
 }
-

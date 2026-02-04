@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 
 import 'package:provider/provider.dart';
 import 'package:mad_assignment/controllers/auth_controller.dart';
-import 'package:mad_assignment/models/cart.dart';
 import 'package:mad_assignment/pages/signin_page.dart';
 import 'package:mad_assignment/widgets/logout_button.dart';
 import 'package:mad_assignment/widgets/profile_card.dart';
@@ -35,7 +34,7 @@ class _ProfilePageState extends State<ProfilePage> {
                       context,
                       listen: false,
                     ).logout();
-                    Cart.instance.clearCart();
+                    //Cart.instance.clearCart();
                     Navigator.of(context).pushReplacement(
                       MaterialPageRoute<void>(
                         builder: (context) => SigninPage(),
