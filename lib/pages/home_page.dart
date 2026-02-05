@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
+import 'package:mad_assignment/services/battery_service.dart';
 import 'package:provider/provider.dart';
 import 'package:mad_assignment/controllers/auth_controller.dart';
 import 'package:mad_assignment/widgets/brand_card.dart'; // Retained for BrandCard usage
@@ -14,9 +15,29 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  //Date and Time Formatters
+  //DATE AND TIME FORMATTERS
   final DateFormat formatter = DateFormat('EEEE, MMMM');
   final DateFormat dayformat = DateFormat("dd");
+
+  //SHOW BATTERY STATUS
+  final BatteryService _batteryService = BatteryService();
+  int _batteryLevel = 0;
+
+  Future<void> loadBatteryInfo() async {
+    final batteryInfo = await _batteryService.getBatteryInfo();
+
+    if (!mounted) return;
+
+    setState(() {
+      _batteryLevel = batteryInfo['level'];
+    });
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    loadBatteryInfo();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -76,11 +97,37 @@ class _HomePageState extends State<HomePage> {
                   ),
                 ),
                 Text(
-                  "Hello, ${user?.name ?? "Guest"}",
+                  "Welcome, ${user?.name ?? "Guest"}",
                   style: TextStyle(
                     fontSize: 30,
                     fontWeight: FontWeight.bold,
                     color: Colors.black,
+                  ),
+                ),
+                const SizedBox(height: 8),
+                Container(
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 12,
+                    vertical: 6,
+                  ),
+                  decoration: BoxDecoration(
+                    color: Colors.green.shade50,
+                    borderRadius: BorderRadius.circular(20),
+                    border: Border.all(color: Colors.green),
+                  ),
+                  child: Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Icon(
+                        Icons.battery_full,
+                        color: _batteryLevel < 20 ? Colors.red : Colors.green,
+                      ),
+                      const SizedBox(width: 8),
+                      Text(
+                        "$_batteryLevel%",
+                        style: const TextStyle(fontWeight: FontWeight.bold),
+                      ),
+                    ],
                   ),
                 ),
                 SizedBox(height: 10),

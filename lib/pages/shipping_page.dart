@@ -1,18 +1,17 @@
 import 'package:flutter/material.dart';
-import 'package:geolocator/geolocator.dart';
-import 'package:geocoding/geocoding.dart';
+import 'package:mad_assignment/services/location_service.dart';
 import 'package:mad_assignment/widgets/payment_button.dart';
 
-class PaymentPage extends StatefulWidget {
+class ShippingPage extends StatefulWidget {
   final double totalPrice;
 
-  const PaymentPage({super.key, required this.totalPrice});
+  const ShippingPage({super.key, required this.totalPrice});
 
   @override
-  State<PaymentPage> createState() => _PaymentPageState();
+  State<ShippingPage> createState() => _ShippingPageState();
 }
 
-class _PaymentPageState extends State<PaymentPage> {
+class _ShippingPageState extends State<ShippingPage> {
   final TextEditingController shippingNameController = TextEditingController();
   final TextEditingController shippingEmailController = TextEditingController();
   final TextEditingController shippingContactController =
@@ -22,59 +21,23 @@ class _PaymentPageState extends State<PaymentPage> {
   final TextEditingController shippingCityController = TextEditingController();
 
   //GET CURRENT LOCATION
+  final LocationService _locationService = LocationService();
+
   Future<void> autoFillAddressFromLocation() async {
     try {
-      bool serviceEnabled = await Geolocator.isLocationServiceEnabled();
-      if (!serviceEnabled) {
-        if (!mounted) return;
-        ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text("Enable location services")),
-        );
-        return;
-      }
-
-      LocationPermission permission = await Geolocator.requestPermission();
-      if (permission == LocationPermission.denied ||
-          permission == LocationPermission.deniedForever) {
-        if (!mounted) return;
-        ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text("Location permission denied")),
-        );
-        return;
-      }
-
-      // Use the new LocationSettings API
-      LocationSettings locationSettings = const LocationSettings(
-        accuracy: LocationAccuracy.high,
-        distanceFilter: 10,
-      );
-
-      Position position = await Geolocator.getCurrentPosition(
-        locationSettings: locationSettings,
-      );
-
-      List<Placemark> placemarks = await placemarkFromCoordinates(
-        position.latitude,
-        position.longitude,
-      );
+      final locationData = await _locationService.getCurrentAddress();
 
       if (!mounted) return;
 
-      Placemark place = placemarks.first;
-
-      String address =
-          "${place.street ?? ''}, ${place.subLocality ?? ''}, ${place.locality ?? ''}";
-      String city = place.locality ?? '';
-
       setState(() {
-        shippingAddressController.text = address;
-        shippingCityController.text = city;
+        shippingAddressController.text = locationData['address']!;
+        shippingCityController.text = locationData['city']!;
       });
     } catch (e) {
       if (!mounted) return;
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text("Failed to detect location")),
-      );
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(SnackBar(content: Text("Failed to Detect Location")));
     }
   }
 
@@ -150,7 +113,6 @@ class _PaymentPageState extends State<PaymentPage> {
                     const SizedBox(height: 10),
                     TextField(
                       controller: shippingAddressController,
-                      readOnly: true,
                       onTap: autoFillAddressFromLocation,
                       keyboardType: TextInputType.text,
                       decoration: const InputDecoration(

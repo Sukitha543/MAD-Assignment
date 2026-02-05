@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:mad_assignment/models/product.dart';
-import 'package:mad_assignment/pages/payment_page.dart';
+import 'package:mad_assignment/pages/shipping_page.dart';
 import 'package:mad_assignment/widgets/checkout_total.dart';
 import 'package:mad_assignment/widgets/order_card.dart';
 import 'package:mad_assignment/widgets/order_now_button.dart';
@@ -52,7 +52,8 @@ class CheckoutPage extends StatelessWidget {
                 onPressed: () {
                   Navigator.of(context).push(
                     MaterialPageRoute<void>(
-                      builder: (context) => PaymentPage(totalPrice: totalPrice),
+                      builder: (context) =>
+                          ShippingPage(totalPrice: totalPrice),
                     ),
                   );
                 },
