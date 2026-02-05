@@ -16,6 +16,14 @@ class CartController with ChangeNotifier {
   double get total => _total;
   bool get isLoading => _isLoading;
 
+  CartController() {
+    _init();
+  }
+
+  Future<void> _init() async {
+    await fetchCart();
+  }
+
   // Read token
   Future<String?> _getToken() async {
     return await _storage.read(key: 'token');

@@ -15,6 +15,14 @@ class ProductController with ChangeNotifier {
   bool get isLoading => _isLoading;
   String? get errorMessage => _errorMessage;
 
+  ProductController() {
+    _init();
+  }
+
+  Future<void> _init() async {
+    await fetchProducts();
+  }
+
   //FETCH PRODUCTS
   Future<void> fetchProducts() async {
     _isLoading = true;

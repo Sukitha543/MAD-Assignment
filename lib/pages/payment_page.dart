@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:intl/intl.dart';
+import 'package:geolocator/geolocator.dart';
+import 'package:geocoding/geocoding.dart';
 import 'package:mad_assignment/widgets/payment_button.dart';
 
 class PaymentPage extends StatefulWidget {
@@ -12,23 +13,68 @@ class PaymentPage extends StatefulWidget {
 }
 
 class _PaymentPageState extends State<PaymentPage> {
-  final TextEditingController nameController = TextEditingController();
-  final TextEditingController cardNumberController = TextEditingController();
-  final TextEditingController expiryDateController = TextEditingController();
+  final TextEditingController shippingNameController = TextEditingController();
+  final TextEditingController shippingEmailController = TextEditingController();
+  final TextEditingController shippingContactController =
+      TextEditingController();
+  final TextEditingController shippingAddressController =
+      TextEditingController();
+  final TextEditingController shippingCityController = TextEditingController();
 
-  // Date Picker function
-  Future<void> selectDate(BuildContext context) async {
-    final DateTime? pickedDate = await showDatePicker(
-      context: context,
-      initialDate: DateTime.now(),
-      firstDate: DateTime(2024),
-      lastDate: DateTime(2035),
-    );
+  //GET CURRENT LOCATION
+  Future<void> autoFillAddressFromLocation() async {
+    try {
+      bool serviceEnabled = await Geolocator.isLocationServiceEnabled();
+      if (!serviceEnabled) {
+        if (!mounted) return;
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text("Enable location services")),
+        );
+        return;
+      }
 
-    if (pickedDate != null) {
+      LocationPermission permission = await Geolocator.requestPermission();
+      if (permission == LocationPermission.denied ||
+          permission == LocationPermission.deniedForever) {
+        if (!mounted) return;
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text("Location permission denied")),
+        );
+        return;
+      }
+
+      // Use the new LocationSettings API
+      LocationSettings locationSettings = const LocationSettings(
+        accuracy: LocationAccuracy.high,
+        distanceFilter: 10,
+      );
+
+      Position position = await Geolocator.getCurrentPosition(
+        locationSettings: locationSettings,
+      );
+
+      List<Placemark> placemarks = await placemarkFromCoordinates(
+        position.latitude,
+        position.longitude,
+      );
+
+      if (!mounted) return;
+
+      Placemark place = placemarks.first;
+
+      String address =
+          "${place.street ?? ''}, ${place.subLocality ?? ''}, ${place.locality ?? ''}";
+      String city = place.locality ?? '';
+
       setState(() {
-        expiryDateController.text = DateFormat('MM/yy').format(pickedDate);
+        shippingAddressController.text = address;
+        shippingCityController.text = city;
       });
+    } catch (e) {
+      if (!mounted) return;
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text("Failed to detect location")),
+      );
     }
   }
 
@@ -38,7 +84,7 @@ class _PaymentPageState extends State<PaymentPage> {
       child: Scaffold(
         backgroundColor: Colors.white,
         appBar: AppBar(
-          title: const Text("Payment"),
+          title: const Text("Shipping Details"),
           backgroundColor: Colors.green,
           foregroundColor: Colors.white,
         ),
@@ -75,77 +121,99 @@ class _PaymentPageState extends State<PaymentPage> {
                     const SizedBox(height: 20),
                     // Account Holder
                     TextField(
-                      controller: nameController,
+                      controller: shippingNameController,
                       decoration: const InputDecoration(
-                        labelText: "Account Holder Name",
+                        labelText: "Full Name",
                         border: OutlineInputBorder(),
                       ),
                     ),
                     const SizedBox(height: 10),
                     // Card Number
                     TextField(
-                      controller: cardNumberController,
-                      keyboardType: TextInputType.number,
+                      controller: shippingEmailController,
+                      keyboardType: TextInputType.emailAddress,
                       decoration: const InputDecoration(
-                        labelText: "Card Number",
+                        labelText: "Email",
                         border: OutlineInputBorder(),
                       ),
                     ),
                     const SizedBox(height: 10),
                     // Expiry Date Picker
                     TextField(
-                      controller: expiryDateController,
-                      readOnly: true,
-                      onTap: () {
-                        selectDate(context);
-                      },
+                      controller: shippingContactController,
+                      keyboardType: TextInputType.number,
                       decoration: const InputDecoration(
-                        labelText: "Expiry Date",
+                        labelText: "Contact Number",
                         border: OutlineInputBorder(),
-                        suffixIcon: Icon(Icons.calendar_today),
+                      ),
+                    ),
+                    const SizedBox(height: 10),
+                    TextField(
+                      controller: shippingAddressController,
+                      readOnly: true,
+                      onTap: autoFillAddressFromLocation,
+                      keyboardType: TextInputType.text,
+                      decoration: const InputDecoration(
+                        labelText: "Address",
+                        border: OutlineInputBorder(),
+                        suffixIcon: Icon(Icons.location_on),
+                      ),
+                    ),
+                    const SizedBox(height: 10),
+                    TextField(
+                      controller: shippingCityController,
+                      keyboardType: TextInputType.text,
+                      decoration: const InputDecoration(
+                        labelText: "City",
+                        border: OutlineInputBorder(),
                       ),
                     ),
                     const SizedBox(height: 20),
                     // Confirm Payment Button
                     PaymentButton(
                       onPressed: () {
-                        if (nameController.text.isEmpty ||
-                            cardNumberController.text.isEmpty ||
-                            expiryDateController.text.isEmpty) {
+                        if (shippingNameController.text.isEmpty ||
+                            shippingEmailController.text.isEmpty ||
+                            shippingContactController.text.isEmpty ||
+                            shippingAddressController.text.isEmpty ||
+                            shippingCityController.text.isEmpty) {
                           ScaffoldMessenger.of(context).showSnackBar(
                             const SnackBar(
                               content: Text(
-                                "Please fill the Payment form",
+                                "Please fill all the Shipping Details",
                                 style: TextStyle(fontSize: 18),
                               ),
                               backgroundColor: Colors.red,
                               duration: Duration(seconds: 1),
                             ),
                           );
-                        } else if (cardNumberController.text.length < 16) {
+                        } else if (shippingContactController.text.length < 10) {
                           ScaffoldMessenger.of(context).showSnackBar(
                             const SnackBar(
                               content: Text(
-                                "Card number must be at least 16 digits.", style: TextStyle(fontSize: 18),
+                                "Contact number must be at least 10 digits.",
+                                style: TextStyle(fontSize: 18),
                               ),
                               backgroundColor: Colors.red,
                               duration: Duration(seconds: 1),
                             ),
                           );
-                        }
-                        else{
-                          nameController.clear();
-                          cardNumberController.clear();
-                          expiryDateController.clear();
+                        } else {
+                          shippingNameController.clear();
+                          shippingEmailController.clear();
+                          shippingContactController.clear();
+                          shippingAddressController.clear();
+                          shippingCityController.clear();
                           ScaffoldMessenger.of(context).showSnackBar(
                             const SnackBar(
                               content: Text(
-                                "Payment Sucessful", style: TextStyle(fontSize: 18),
+                                "Order Placed Sucessfully",
+                                style: TextStyle(fontSize: 18),
                               ),
                               backgroundColor: Colors.green,
                               duration: Duration(seconds: 1),
                             ),
-                            
+                            // NAVIGATE TO STRIPE PAYMENT GATEWAY
                           );
                         }
                       },

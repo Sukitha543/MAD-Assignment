@@ -4,22 +4,8 @@ import 'package:mad_assignment/controllers/product_controller.dart';
 import 'package:mad_assignment/pages/product_details_page.dart';
 import 'package:mad_assignment/widgets/product_card.dart';
 
-class ProductPage extends StatefulWidget {
+class ProductPage extends StatelessWidget {
   const ProductPage({super.key});
-
-  @override
-  State<ProductPage> createState() => _ProductPageState();
-}
-
-class _ProductPageState extends State<ProductPage> {
-  @override
-  void initState() {
-    super.initState();
-    // Schedule the fetch after the current frame to avoid build conflicts
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      Provider.of<ProductController>(context, listen: false).fetchProducts();
-    });
-  }
 
   @override
   Widget build(BuildContext context) {

@@ -6,22 +6,8 @@ import '../pages/checkout_page.dart';
 import '../widgets/cart_item_card.dart';
 import '../widgets/checkout_summary_card.dart';
 
-class CartPage extends StatefulWidget {
+class CartPage extends StatelessWidget {
   const CartPage({super.key});
-
-  @override
-  State<CartPage> createState() => _CartPageState();
-}
-
-class _CartPageState extends State<CartPage> {
-  @override
-  void initState() {
-    super.initState();
-    // Fetch cart items when page loads
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      context.read<CartController>().fetchCart();
-    });
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -33,7 +19,6 @@ class _CartPageState extends State<CartPage> {
             if (controller.isLoading) {
               return const Center(child: CircularProgressIndicator());
             }
-
             if (controller.cartItems.isEmpty) {
               // Handle empty cart view or redirect
               // Note: The previous logic redirected to BottomNavigation which might contain this page,
@@ -46,7 +31,6 @@ class _CartPageState extends State<CartPage> {
                 ),
               );
             }
-
             return Column(
               children: [
                 Expanded(

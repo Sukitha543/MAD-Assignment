@@ -3,7 +3,7 @@ import 'package:mad_assignment/models/product.dart';
 
 class OrderCard extends StatelessWidget {
   final Product items;
-  const OrderCard({super.key, required this.items,});
+  const OrderCard({super.key, required this.items});
 
   @override
   Widget build(BuildContext context) {
@@ -23,13 +23,39 @@ class OrderCard extends StatelessWidget {
       ),
       child: Row(
         children: [
-          ClipRRect(
-            borderRadius: BorderRadiusGeometry.circular(8),
-            child: Image.asset(
-              items.image,
-              width:100,
-              height: 100,
-              fit: BoxFit.cover,
+          SizedBox(
+            height: 100,
+            width: 100,
+            child: ClipRRect(
+              borderRadius: BorderRadius.circular(8),
+              child: items.image.contains('http')
+                  ? Image.network(
+                      items.image,
+                      width: 100,
+                      height: 100,
+                      fit: BoxFit.cover,
+                      errorBuilder: (context, error, stackTrace) => Container(
+                        width: 100,
+                        height: 100,
+                        color: Colors.grey[200],
+                        child: const Icon(
+                          Icons.broken_image,
+                          color: Colors.grey,
+                        ),
+                      ),
+                    )
+                  : Image.asset(
+                      items.image,
+                      width: 100,
+                      height: 100,
+                      fit: BoxFit.cover,
+                      errorBuilder: (context, error, stackTrace) => Container(
+                        width: 100,
+                        height: 100,
+                        color: Colors.grey[200],
+                        child: const Icon(Icons.watch, color: Colors.grey),
+                      ),
+                    ),
             ),
           ),
           SizedBox(width: 12),
@@ -59,7 +85,8 @@ class OrderCard extends StatelessWidget {
               ],
             ),
           ),
-         ], ),
+        ],
+      ),
     );
   }
 }

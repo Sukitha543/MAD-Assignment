@@ -7,22 +7,20 @@ class PaymentButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return SizedBox(
-        width: double.infinity,
+      width: double.infinity,
       height: 50,
       child: ElevatedButton(
         onPressed: onPressed,
         style: ElevatedButton.styleFrom(
-          backgroundColor: Colors.green, 
-          foregroundColor: Colors.white, 
-          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+          backgroundColor: Colors.green,
+          foregroundColor: Colors.white,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(12),
+          ),
         ),
         child: Row(
           mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Text("Confirm Payment",
-              style: TextStyle(fontSize: 18),
-            ),
-          ],
+          children: [Text("PAY WITH STRIPE", style: TextStyle(fontSize: 18))],
         ),
       ),
     );

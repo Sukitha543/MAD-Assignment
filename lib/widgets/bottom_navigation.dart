@@ -1,8 +1,5 @@
 import 'package:flutter/material.dart';
 
-import 'package:provider/provider.dart';
-
-import 'package:mad_assignment/controllers/cart_controller.dart';
 import 'package:mad_assignment/pages/cart_page.dart';
 import 'package:mad_assignment/pages/home_page.dart';
 import 'package:mad_assignment/pages/product_page.dart';
@@ -38,28 +35,7 @@ class _BottomNavigationState extends State<BottomNavigation> {
         currentIndex: currentIndex,
         onTap: (index) {
           setState(() {
-            // Check if user is trying to open the Cart page (index == 2)
-            if (index == 2 &&
-                Provider.of<CartController>(
-                  context,
-                  listen: false,
-                ).cartItems.isEmpty) {
-              // Show a snackbar if no products are added
-              ScaffoldMessenger.of(context).showSnackBar(
-                const SnackBar(
-                  content: Text(
-                    "Your cart is empty. Add some products first!",
-                    style: TextStyle(fontSize: 18),
-                  ),
-                  duration: Duration(seconds: 1),
-                  backgroundColor: Colors.red,
-                ),
-              );
-            } else {
-              setState(() {
-                currentIndex = index;
-              });
-            }
+            currentIndex = index;
           });
         },
         items: [
