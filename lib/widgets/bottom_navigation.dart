@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import 'package:mad_assignment/pages/cart_page.dart';
+import 'package:mad_assignment/pages/favorites_page.dart';
 import 'package:mad_assignment/pages/home_page.dart';
 import 'package:mad_assignment/pages/product_page.dart';
 import 'package:mad_assignment/pages/profile_page.dart';
@@ -19,7 +20,7 @@ class _BottomNavigationState extends State<BottomNavigation> {
     HomePage(),
     ProductPage(),
     CartPage(),
-    ProfilePage(),
+    FavoritesPage(),
   ];
 
   @override
@@ -28,6 +29,16 @@ class _BottomNavigationState extends State<BottomNavigation> {
       appBar: AppBar(
         backgroundColor: Colors.black,
         title: const Text("TIMEBRIDGE", style: TextStyle(color: Colors.white)),
+        actions: [
+          IconButton(
+            icon: const Icon(Icons.account_circle, color: Colors.white),
+            onPressed: () {
+              Navigator.of(context).push(
+                MaterialPageRoute<void>(builder: (context) => ProfilePage()),
+              );
+            },
+          ),
+        ],
       ),
       bottomNavigationBar: BottomNavigationBar(
         selectedItemColor: Colors.black,
@@ -46,8 +57,8 @@ class _BottomNavigationState extends State<BottomNavigation> {
             label: "Cart",
           ),
           BottomNavigationBarItem(
-            icon: Icon(Icons.account_box),
-            label: "Profile",
+            icon: Icon(Icons.favorite),
+            label: "favorites",
           ),
         ],
       ),

@@ -19,6 +19,13 @@ class _ProfilePageState extends State<ProfilePage> {
     return SafeArea(
       child: Scaffold(
         backgroundColor: Colors.white,
+        appBar: AppBar(
+          title: Text("PROFILE"),
+          centerTitle: true,
+          backgroundColor: Colors.black,
+          foregroundColor: Colors.white,
+          elevation: 2,
+        ),
         body: SingleChildScrollView(
           physics: BouncingScrollPhysics(),
           child: Center(
