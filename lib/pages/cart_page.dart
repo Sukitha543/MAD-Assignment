@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
-
 import '../controllers/cart_controller.dart';
 import '../pages/checkout_page.dart';
 import '../widgets/cart_item_card.dart';
@@ -24,10 +24,24 @@ class CartPage extends StatelessWidget {
               // Note: The previous logic redirected to BottomNavigation which might contain this page,
               // causing a loop or weird UX if this IS the cart tab.
               // Better to show an empty state message here.
-              return const Center(
-                child: Text(
-                  "Your cart is empty",
-                  style: TextStyle(fontSize: 18),
+              return Center(
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Icon(
+                      Icons.shopping_cart,
+                      size: 80,
+                      color: Colors.grey[300],
+                    ),
+                    const SizedBox(height: 16),
+                    Text(
+                      "Your Cart is Empty",
+                      style: GoogleFonts.poppins(
+                        fontSize: 18,
+                        color: Colors.grey,
+                      ),
+                    ),
+                  ],
                 ),
               );
             }

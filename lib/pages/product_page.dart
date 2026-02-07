@@ -20,15 +20,28 @@ class ProductPage extends StatelessWidget {
       body: isLoading
           ? const Center(child: CircularProgressIndicator())
           : products.isEmpty
-          ? Center(
-              child: Padding(
-                padding: const EdgeInsets.all(20.0),
-                child: Text(
-                  errorMessage ?? "No products found",
-                  textAlign: TextAlign.center,
-                  style: const TextStyle(fontSize: 16, color: Colors.red),
+          ? Column(
+              children: [
+                Center(
+                  child: Padding(
+                    padding: const EdgeInsets.all(20.0),
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Icon(Icons.watch, size: 80, color: Colors.grey[300]),
+                        Text(
+                          errorMessage ?? "No products found",
+                          textAlign: TextAlign.center,
+                          style: const TextStyle(
+                            fontSize: 16,
+                            color: Colors.red,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
                 ),
-              ),
+              ],
             )
           : ListView.builder(
               physics: const BouncingScrollPhysics(),

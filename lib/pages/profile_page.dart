@@ -42,10 +42,11 @@ class _ProfilePageState extends State<ProfilePage> {
                       listen: false,
                     ).logout();
                     //Cart.instance.clearCart();
-                    Navigator.of(context).pushReplacement(
+                    Navigator.of(context).pushAndRemoveUntil(
                       MaterialPageRoute<void>(
                         builder: (context) => SigninPage(),
                       ),
+                      (route) => false,
                     );
                   },
                 ),

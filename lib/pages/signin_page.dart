@@ -46,8 +46,9 @@ class _SigninPageState extends State<SigninPage> {
     if (!mounted) return;
 
     if (success) {
-      Navigator.of(context).pushReplacement(
+      Navigator.of(context).pushAndRemoveUntil(
         MaterialPageRoute<void>(builder: (context) => BottomNavigation()),
+        (route) => false,
       );
     } else {
       ScaffoldMessenger.of(context).showSnackBar(

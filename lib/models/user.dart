@@ -20,4 +20,9 @@ class User {
       token: json['token'] ?? '',
     );
   }
+
+  // Convert User object to JSON
+  Map<String, dynamic> toJson() {
+    return {'id': id, 'name': name, 'email': email, 'token': token};
+  }
 }

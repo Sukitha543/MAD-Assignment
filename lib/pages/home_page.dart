@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
 import 'package:mad_assignment/services/battery_service.dart';
@@ -15,6 +16,8 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
+  final storage = const FlutterSecureStorage();
+
   //DATE AND TIME FORMATTERS
   final DateFormat formatter = DateFormat('EEEE, MMMM');
   final DateFormat dayformat = DateFormat("dd");
@@ -36,7 +39,13 @@ class _HomePageState extends State<HomePage> {
   @override
   void initState() {
     super.initState();
+    checkToken();
     loadBatteryInfo();
+  }
+
+  Future<void> checkToken() async {
+    String? token = await storage.read(key: 'token');
+    debugPrint("READ TOKEN OFFLINE: $token");
   }
 
   @override

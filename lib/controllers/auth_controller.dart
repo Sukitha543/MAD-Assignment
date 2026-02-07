@@ -1,3 +1,4 @@
+import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import '../models/user.dart';
@@ -13,6 +14,12 @@ class AuthController with ChangeNotifier {
 
   String? _errorMessage;
   String? get errorMessage => _errorMessage;
+
+  bool _isLoggedIn = false;
+  bool get isLoggedIn => _isLoggedIn;
+
+  bool _isCheckingAuth = true;
+  bool get isCheckingAuth => _isCheckingAuth;
 
   //CUSTOMER REGISTRATION
   Future<bool> register({
@@ -35,6 +42,7 @@ class AuthController with ChangeNotifier {
       final response = await ApiService.post('register', data);
       await _saveToken(response['token']);
       _user = User.fromJson(response['user']);
+      await _saveUser(_user!);
       notifyListeners();
       return true;
     } catch (e) {
@@ -59,6 +67,7 @@ class AuthController with ChangeNotifier {
       final response = await ApiService.post('login', data);
       await _saveToken(response['token']);
       _user = User.fromJson(response['user']);
+      await _saveUser(_user!);
       notifyListeners();
       return true;
     } catch (e) {
@@ -74,16 +83,50 @@ class AuthController with ChangeNotifier {
   //LOGOUT
   Future<void> logout() async {
     await storage.delete(key: 'token');
+    await _clearUser();
     _user = null;
+    _isLoggedIn = false;
     notifyListeners();
   }
 
   Future<void> _saveToken(String token) async {
     print('AuthController: Saving token: $token');
     await storage.write(key: 'token', value: token);
+    _isLoggedIn = true;
+    notifyListeners();
   }
 
   Future<String?> getToken() async {
     return await storage.read(key: 'token');
+  }
+
+  Future<void> checkLoginStatus() async {
+    try {
+      String? token = await storage.read(key: 'token');
+      String? userJson = await storage.read(key: 'user');
+
+      if (token != null && userJson != null) {
+        _isLoggedIn = true;
+        _user = User.fromJson(jsonDecode(userJson));
+      } else {
+        _isLoggedIn = false;
+        _user = null;
+      }
+    } catch (e) {
+      print('Error checking login status: $e');
+      _isLoggedIn = false;
+      _user = null;
+    } finally {
+      _isCheckingAuth = false;
+      notifyListeners();
+    }
+  }
+
+  Future<void> _saveUser(User user) async {
+    await storage.write(key: 'user', value: jsonEncode(user.toJson()));
+  }
+
+  Future<void> _clearUser() async {
+    await storage.delete(key: 'user');
   }
 }
