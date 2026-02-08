@@ -13,11 +13,11 @@ class ContactCard extends StatelessWidget {
       width: 320,
       padding: EdgeInsets.all(20),
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: Theme.of(context).cardColor,
         borderRadius: BorderRadius.circular(10),
         boxShadow: [
           BoxShadow(
-            color: Colors.black12,
+            color: Theme.of(context).shadowColor.withOpacity(0.1),
             blurRadius: 15,
             offset: Offset(0, 5),
           ),
@@ -28,19 +28,20 @@ class ContactCard extends StatelessWidget {
         children: [
           Center(
             child: Text(
-            "Contact Information",
-            style: TextStyle(
-              fontSize:20,
-              fontWeight: FontWeight.bold,
-              color: Colors.blueGrey[800],
-            ),)
+              "Contact Information",
+              style: TextStyle(
+                fontSize: 20,
+                fontWeight: FontWeight.bold,
+                color: Theme.of(context).colorScheme.onSurface,
+              ),
+            ),
           ),
-          SizedBox(height: 25,),
+          SizedBox(height: 25),
           Row(
             children: [
               Icon(
                 Icons.location_on,
-                color: Colors.black,
+                color: Theme.of(context).colorScheme.onSurface,
                 size: 28,
               ),
               SizedBox(width: 10),
@@ -53,22 +54,26 @@ class ContactCard extends StatelessWidget {
                       style: TextStyle(
                         fontSize: 16,
                         fontWeight: FontWeight.w600,
+                        color: Theme.of(context).colorScheme.primary,
                       ),
                     ),
                     Text(
                       location,
-                      style: TextStyle(color: Colors.grey[700]),
+                      style: TextStyle(
+                        color: Theme.of(context).colorScheme.onSurface,
                       ),
+                    ),
                   ],
-                )),
+                ),
+              ),
             ],
           ),
           SizedBox(height: 20),
-           Row(
+          Row(
             children: [
               Icon(
                 Icons.call,
-                color: Colors.black,
+                color: Theme.of(context).colorScheme.onSurface,
                 size: 28,
               ),
               SizedBox(width: 10),
@@ -81,22 +86,26 @@ class ContactCard extends StatelessWidget {
                       style: TextStyle(
                         fontSize: 16,
                         fontWeight: FontWeight.w600,
+                        color: Theme.of(context).colorScheme.primary,
                       ),
                     ),
                     Text(
-                      "$contact",
-                      style: TextStyle(color: Colors.grey[700]),
+                      "0${contact.toString()}",
+                      style: TextStyle(
+                        color: Theme.of(context).colorScheme.onSurface,
                       ),
+                    ),
                   ],
-                )),
+                ),
+              ),
             ],
           ),
           SizedBox(height: 20),
-           Row(
+          Row(
             children: [
               Icon(
                 Icons.email,
-                color: Colors.black,
+                color: Theme.of(context).colorScheme.onSurface,
                 size: 28,
               ),
               SizedBox(width: 10),
@@ -109,14 +118,18 @@ class ContactCard extends StatelessWidget {
                       style: TextStyle(
                         fontSize: 16,
                         fontWeight: FontWeight.w600,
+                        color: Theme.of(context).colorScheme.primary,
                       ),
                     ),
                     Text(
                       email,
-                      style: TextStyle(color: Colors.grey[700]),
+                      style: TextStyle(
+                        color: Theme.of(context).colorScheme.onSurface,
                       ),
+                    ),
                   ],
-                )),
+                ),
+              ),
             ],
           ),
         ],

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 import '../controllers/cart_controller.dart';
+import '../controllers/network_controller.dart';
 import '../pages/checkout_page.dart';
 import '../widgets/cart_item_card.dart';
 import '../widgets/checkout_summary_card.dart';
@@ -13,7 +14,7 @@ class CartPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return SafeArea(
       child: Scaffold(
-        backgroundColor: Colors.white,
+        // backgroundColor handled by theme
         body: Consumer<CartController>(
           builder: (context, controller, child) {
             if (controller.isLoading) {
@@ -56,6 +57,25 @@ class CartPage extends StatelessWidget {
                       return CartItemCard(
                         product: cartItem.product,
                         onDelete: () async {
+                          final networkController =
+                              Provider.of<NetworkController>(
+                                context,
+                                listen: false,
+                              );
+
+                          if (!networkController.isConnected) {
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              const SnackBar(
+                                content: Text(
+                                  "Failed to remove: No internet connection",
+                                ),
+                                backgroundColor: Colors.red,
+                                duration: Duration(seconds: 2),
+                              ),
+                            );
+                            return;
+                          }
+
                           await controller.removeFromCart(cartItem.id);
 
                           if (context.mounted && controller.cartItems.isEmpty) {
@@ -79,6 +99,24 @@ class CartPage extends StatelessWidget {
                 CheckoutSummaryCard(
                   totalPrice: controller.total,
                   onCheckout: () {
+                    final networkController = Provider.of<NetworkController>(
+                      context,
+                      listen: false,
+                    );
+
+                    if (!networkController.isConnected) {
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        const SnackBar(
+                          content: Text(
+                            "Failed to proceed: No internet connection",
+                          ),
+                          backgroundColor: Colors.red,
+                          duration: Duration(seconds: 2),
+                        ),
+                      );
+                      return;
+                    }
+
                     Navigator.of(context).push(
                       MaterialPageRoute<void>(
                         builder: (context) => CheckoutPage(

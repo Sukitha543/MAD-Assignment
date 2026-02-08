@@ -20,11 +20,14 @@ class CheckoutPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return SafeArea(
       child: Scaffold(
-        backgroundColor: Colors.white,
+        // backgroundColor handled by theme
         appBar: AppBar(
           title: Text("Checkout"),
-          backgroundColor: Colors.green,
+          backgroundColor: Theme.of(context).brightness == Brightness.light
+              ? Colors.green
+              : const Color(0xFF1B5E20),
           foregroundColor: Colors.white,
+          iconTheme: const IconThemeData(color: Colors.white),
         ),
         body: Padding(
           padding: const EdgeInsets.all(10),

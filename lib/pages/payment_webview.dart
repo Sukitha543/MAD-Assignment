@@ -55,14 +55,22 @@ class _PaymentWebViewState extends State<PaymentWebView> {
     return Scaffold(
       appBar: AppBar(
         title: const Text("Secure Payment"),
-        backgroundColor: Colors.green,
+        backgroundColor: Theme.of(context).brightness == Brightness.light
+            ? Colors.green
+            : const Color(0xFF1B5E20),
         foregroundColor: Colors.white,
       ),
       body: Stack(
         children: [
           WebViewWidget(controller: _controller),
           if (_isLoading)
-            const Center(child: CircularProgressIndicator(color: Colors.green)),
+            Center(
+              child: CircularProgressIndicator(
+                color: Theme.of(context).brightness == Brightness.light
+                    ? Colors.green
+                    : Colors.white,
+              ),
+            ),
         ],
       ),
     );

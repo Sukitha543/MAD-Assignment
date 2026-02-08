@@ -18,13 +18,16 @@ class _ProfilePageState extends State<ProfilePage> {
   Widget build(BuildContext context) {
     return SafeArea(
       child: Scaffold(
-        backgroundColor: Colors.white,
+        // backgroundColor handled by theme
         appBar: AppBar(
           title: Text("PROFILE"),
           centerTitle: true,
-          backgroundColor: Colors.black,
+          backgroundColor: Theme.of(context).brightness == Brightness.light
+              ? Colors.black
+              : Theme.of(context).appBarTheme.backgroundColor,
           foregroundColor: Colors.white,
           elevation: 2,
+          iconTheme: const IconThemeData(color: Colors.white),
         ),
         body: SingleChildScrollView(
           physics: BouncingScrollPhysics(),

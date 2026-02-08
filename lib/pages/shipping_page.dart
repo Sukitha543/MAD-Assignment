@@ -5,6 +5,7 @@ import 'package:mad_assignment/services/api_service.dart';
 import 'package:mad_assignment/controllers/auth_controller.dart';
 import 'package:mad_assignment/controllers/cart_controller.dart';
 import 'package:mad_assignment/pages/payment_webview.dart';
+import 'package:mad_assignment/services/contact_service.dart';
 import 'package:provider/provider.dart';
 
 class ShippingPage extends StatefulWidget {
@@ -50,11 +51,14 @@ class _ShippingPageState extends State<ShippingPage> {
   Widget build(BuildContext context) {
     return SafeArea(
       child: Scaffold(
-        backgroundColor: Colors.white,
+        // backgroundColor handled by theme
         appBar: AppBar(
           title: const Text("Shipping Details"),
-          backgroundColor: Colors.green,
+          backgroundColor: Theme.of(context).brightness == Brightness.light
+              ? Colors.green
+              : const Color(0xFF1B5E20), // Darker green for dark mode
           foregroundColor: Colors.white,
+          iconTheme: const IconThemeData(color: Colors.white),
         ),
         body: Center(
           child: SingleChildScrollView(
@@ -63,11 +67,13 @@ class _ShippingPageState extends State<ShippingPage> {
                 width: 350,
                 padding: const EdgeInsets.all(20),
                 decoration: BoxDecoration(
-                  color: Colors.green.shade50,
+                  color: Theme.of(context).brightness == Brightness.light
+                      ? Colors.green.shade50
+                      : Theme.of(context).colorScheme.surface,
                   borderRadius: BorderRadius.circular(15),
                   boxShadow: [
                     BoxShadow(
-                      color: Colors.grey.shade500,
+                      color: Theme.of(context).shadowColor.withOpacity(0.5),
                       blurRadius: 10,
                       offset: const Offset(0, 5),
                     ),
@@ -106,13 +112,40 @@ class _ShippingPageState extends State<ShippingPage> {
                       ),
                     ),
                     const SizedBox(height: 10),
-                    // Expiry Date Picker
+                    //Contact Number
                     TextField(
                       controller: shippingContactController,
-                      keyboardType: TextInputType.number,
-                      decoration: const InputDecoration(
+                      keyboardType: TextInputType.phone,
+                      decoration: InputDecoration(
                         labelText: "Contact Number",
-                        border: OutlineInputBorder(),
+                        border: const OutlineInputBorder(),
+                        suffixIcon: IconButton(
+                          icon: const Icon(Icons.contacts),
+                          onPressed: () async {
+                            try {
+                              final contact =
+                                  await ContactService.pickContact();
+
+                              if (contact != null &&
+                                  contact.phones.isNotEmpty) {
+                                shippingContactController.text =
+                                    contact.phones.first.number;
+                              } else {
+                                ScaffoldMessenger.of(context).showSnackBar(
+                                  const SnackBar(
+                                    content: Text(
+                                      "No phone number in this contact",
+                                    ),
+                                  ),
+                                );
+                              }
+                            } catch (e) {
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                SnackBar(content: Text(e.toString())),
+                              );
+                            }
+                          },
+                        ),
                       ),
                     ),
                     const SizedBox(height: 10),
@@ -145,23 +178,27 @@ class _ShippingPageState extends State<ShippingPage> {
                             shippingAddressController.text.isEmpty ||
                             shippingCityController.text.isEmpty) {
                           ScaffoldMessenger.of(context).showSnackBar(
-                            const SnackBar(
+                            SnackBar(
                               content: Text(
                                 "Please fill all the Shipping Details",
                                 style: TextStyle(fontSize: 18),
                               ),
-                              backgroundColor: Colors.red,
+                              backgroundColor: Theme.of(
+                                context,
+                              ).colorScheme.error,
                               duration: Duration(seconds: 1),
                             ),
                           );
                         } else if (shippingContactController.text.length < 10) {
                           ScaffoldMessenger.of(context).showSnackBar(
-                            const SnackBar(
+                            SnackBar(
                               content: Text(
                                 "Contact number must be at least 10 digits.",
                                 style: TextStyle(fontSize: 18),
                               ),
-                              backgroundColor: Colors.red,
+                              backgroundColor: Theme.of(
+                                context,
+                              ).colorScheme.error,
                               duration: Duration(seconds: 1),
                             ),
                           );
@@ -231,9 +268,9 @@ class _ShippingPageState extends State<ShippingPage> {
           }
         } else {
           ScaffoldMessenger.of(context).showSnackBar(
-            const SnackBar(
+            SnackBar(
               content: Text("Payment Cancelled"),
-              backgroundColor: Colors.orange,
+              backgroundColor: Colors.orange, // Keep valid for both or adjust
             ),
           );
         }
@@ -243,7 +280,7 @@ class _ShippingPageState extends State<ShippingPage> {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
           content: Text("Error: ${e.toString().replaceAll('Exception: ', '')}"),
-          backgroundColor: Colors.red,
+          backgroundColor: Theme.of(context).colorScheme.error,
         ),
       );
     }

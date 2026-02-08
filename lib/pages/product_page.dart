@@ -16,7 +16,7 @@ class ProductPage extends StatelessWidget {
     final errorMessage = productController.errorMessage;
 
     return Scaffold(
-      backgroundColor: Colors.white,
+      // backgroundColor handled by theme
       body: isLoading
           ? const Center(child: CircularProgressIndicator())
           : products.isEmpty

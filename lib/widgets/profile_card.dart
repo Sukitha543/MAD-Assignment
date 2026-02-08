@@ -16,13 +16,13 @@ class ProfileCard extends StatelessWidget {
       margin: const EdgeInsets.symmetric(vertical: 20),
       padding: const EdgeInsets.all(10),
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: Theme.of(context).cardColor,
         borderRadius: BorderRadius.circular(10),
-        boxShadow: const [
+        boxShadow: [
           BoxShadow(
-            color: Colors.black12,
+            color: Theme.of(context).shadowColor.withValues(alpha: 0.1),
             blurRadius: 25,
-            offset: Offset(0, 8),
+            offset: const Offset(0, 8),
           ),
         ],
       ),
@@ -34,46 +34,43 @@ class ProfileCard extends StatelessWidget {
             style: GoogleFonts.poppins(
               fontSize: 20,
               fontWeight: FontWeight.w500,
-              color: Colors.blueGrey[800],
+              color: Theme.of(context).colorScheme.onSurface,
             ),
           ),
           const SizedBox(height: 20),
           Row(
             children: [
-              const Icon(Icons.account_box, color: Colors.black, size: 28),
+              Icon(
+                Icons.account_box,
+                color: Theme.of(context).colorScheme.onSurface,
+                size: 28,
+              ),
               const SizedBox(width: 10),
               Text(
                 user?.name ?? "Guest User",
-                style: const TextStyle(fontSize: 16),
+                style: TextStyle(
+                  fontSize: 16,
+                  color: Theme.of(context).colorScheme.onSurface,
+                ),
               ),
             ],
           ),
           const SizedBox(height: 20),
           Row(
             children: [
-              const Icon(Icons.email, color: Colors.black, size: 28),
+              Icon(
+                Icons.email,
+                color: Theme.of(context).colorScheme.onSurface,
+                size: 28,
+              ),
               const SizedBox(width: 10),
               Text(
                 user?.email ?? "No Email",
-                style: const TextStyle(fontSize: 16),
+                style: TextStyle(
+                  fontSize: 16,
+                  color: Theme.of(context).colorScheme.onSurface,
+                ),
               ),
-            ],
-          ),
-          // Placeholder for missing fields in User model
-          const SizedBox(height: 20),
-          Row(
-            children: [
-              const Icon(Icons.local_shipping, color: Colors.black, size: 28),
-              const SizedBox(width: 10),
-              const Text("Address not set"),
-            ],
-          ),
-          const SizedBox(height: 20),
-          Row(
-            children: [
-              const Icon(Icons.call, color: Colors.black, size: 28),
-              const SizedBox(width: 10),
-              const Text("No contact number"),
             ],
           ),
         ],

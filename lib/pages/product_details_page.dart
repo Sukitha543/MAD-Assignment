@@ -24,13 +24,16 @@ class _ProductDetailsPageState extends State<ProductDetailsPage> {
   Widget build(BuildContext context) {
     return SafeArea(
       child: Scaffold(
-        backgroundColor: Colors.white,
+        // backgroundColor handled by theme
         appBar: AppBar(
           title: Text("Product details"),
           centerTitle: true,
-          backgroundColor: Colors.black,
+          backgroundColor: Theme.of(context).brightness == Brightness.light
+              ? Colors.black
+              : Theme.of(context).appBarTheme.backgroundColor,
           foregroundColor: Colors.white,
           elevation: 2,
+          iconTheme: const IconThemeData(color: Colors.white),
         ),
         body: SingleChildScrollView(
           physics: BouncingScrollPhysics(),
@@ -40,25 +43,16 @@ class _ProductDetailsPageState extends State<ProductDetailsPage> {
               children: [
                 SizedBox(height: 10),
                 ClipRRect(
-                  child: widget.product.image.startsWith('http')
-                      ? CachedNetworkImage(
-                          imageUrl: widget.product.image,
-                          width: double.infinity,
-                          height: 250,
-                          fit: BoxFit.cover,
-                          placeholder: (context, url) =>
-                              const Center(child: CircularProgressIndicator()),
-                          errorWidget: (context, url, error) =>
-                              const Icon(Icons.broken_image, size: 100),
-                        )
-                      : Image.asset(
-                          widget.product.image,
-                          width: double.infinity,
-                          height: 250,
-                          fit: BoxFit.cover,
-                          errorBuilder: (context, error, stackTrace) =>
-                              const Icon(Icons.watch, size: 100),
-                        ),
+                  child: CachedNetworkImage(
+                    imageUrl: widget.product.image,
+                    width: double.infinity,
+                    height: 250,
+                    fit: BoxFit.cover,
+                    placeholder: (context, url) =>
+                        const Center(child: CircularProgressIndicator()),
+                    errorWidget: (context, url, error) =>
+                        const Icon(Icons.broken_image, size: 100),
+                  ),
                 ),
                 SizedBox(height: 20),
                 Column(
@@ -68,11 +62,15 @@ class _ProductDetailsPageState extends State<ProductDetailsPage> {
                       style: TextStyle(
                         fontSize: 25,
                         fontWeight: FontWeight.bold,
+                        color: Theme.of(context).colorScheme.onSurface,
                       ),
                     ),
                     Text(
                       "\$${widget.product.price.toStringAsFixed(2)}",
-                      style: TextStyle(fontSize: 20, color: Colors.blueGrey),
+                      style: TextStyle(
+                        fontSize: 20,
+                        color: Theme.of(context).colorScheme.primary,
+                      ),
                     ),
                   ],
                 ),

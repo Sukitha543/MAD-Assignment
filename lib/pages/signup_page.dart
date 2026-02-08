@@ -115,10 +115,13 @@ class _SignupPageState extends State<SignupPage> {
 
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: Colors.black,
-        foregroundColor: Colors.white,
+        backgroundColor: Colors.transparent,
+        elevation: 0,
+        iconTheme: IconThemeData(
+          color: Theme.of(context).colorScheme.onSurface,
+        ),
       ),
-      backgroundColor: Colors.white,
+      // backgroundColor handled by theme
       body: Padding(
         padding: const EdgeInsets.all(20),
         child: Center(
@@ -132,7 +135,7 @@ class _SignupPageState extends State<SignupPage> {
                   "Sign Up",
                   style: GoogleFonts.poppins(
                     fontSize: 30,
-                    color: Colors.black,
+                    color: Theme.of(context).colorScheme.onSurface,
                     fontWeight: FontWeight.bold,
                   ),
                 ),

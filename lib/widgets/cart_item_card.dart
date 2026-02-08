@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:mad_assignment/models/product.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 
 class CartItemCard extends StatelessWidget {
   final Product product;
@@ -17,11 +18,11 @@ class CartItemCard extends StatelessWidget {
       margin: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
       padding: EdgeInsets.all(8),
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: Theme.of(context).cardColor,
         borderRadius: BorderRadius.circular(12),
         boxShadow: [
           BoxShadow(
-            color: Colors.grey.shade500,
+            color: Theme.of(context).shadowColor.withOpacity(0.3),
             blurRadius: 10,
             offset: Offset(0, 3),
           ),
@@ -31,31 +32,26 @@ class CartItemCard extends StatelessWidget {
         children: [
           ClipRRect(
             borderRadius: BorderRadius.circular(8),
-            child: product.image.contains('http')
-                ? Image.network(
-                    product.image,
-                    width: 100,
-                    height: 100,
-                    fit: BoxFit.cover,
-                    errorBuilder: (context, error, stackTrace) => Container(
-                      width: 100,
-                      height: 100,
-                      color: Colors.grey[200],
-                      child: const Icon(Icons.broken_image, color: Colors.grey),
-                    ),
-                  )
-                : Image.asset(
-                    product.image,
-                    width: 100,
-                    height: 100,
-                    fit: BoxFit.cover,
-                    errorBuilder: (context, error, stackTrace) => Container(
-                      width: 100,
-                      height: 100,
-                      color: Colors.grey[200],
-                      child: const Icon(Icons.watch, color: Colors.grey),
-                    ),
-                  ),
+            child: CachedNetworkImage(
+              imageUrl: product.image,
+              width: 100,
+              height: 100,
+              fit: BoxFit.cover,
+              placeholder: (context, url) => Container(
+                width: 100,
+                height: 100,
+                color: Colors.grey[200],
+                child: const Center(
+                  child: CircularProgressIndicator(strokeWidth: 2),
+                ),
+              ),
+              errorWidget: (context, url, error) => Container(
+                width: 100,
+                height: 100,
+                color: Colors.grey[200],
+                child: const Icon(Icons.broken_image, color: Colors.grey),
+              ),
+            ),
           ),
           const SizedBox(width: 16),
           Expanded(
@@ -74,16 +70,19 @@ class CartItemCard extends StatelessWidget {
                 const SizedBox(height: 4),
                 Text(
                   product.model,
-                  style: const TextStyle(fontSize: 14, color: Colors.blueGrey),
+                  style: TextStyle(
+                    fontSize: 14,
+                    color: Theme.of(context).colorScheme.onSurfaceVariant,
+                  ),
                   maxLines: 2,
                   overflow: TextOverflow.ellipsis,
                 ),
                 const SizedBox(height: 8),
                 Text(
                   "\$${product.price.toStringAsFixed(2)}",
-                  style: const TextStyle(
+                  style: TextStyle(
                     fontSize: 16,
-                    color: Colors.black,
+                    color: Theme.of(context).colorScheme.onSurface,
                     fontWeight: FontWeight.bold,
                   ),
                 ),

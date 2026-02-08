@@ -30,12 +30,12 @@ class _SigninPageState extends State<SigninPage> {
 
     if (email.isEmpty || password.isEmpty) {
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
+        SnackBar(
           content: Text(
             "Please enter both email and password",
             style: TextStyle(fontSize: 18),
           ),
-          backgroundColor: Colors.red,
+          backgroundColor: Theme.of(context).colorScheme.error,
         ),
       );
       return;
@@ -57,7 +57,7 @@ class _SigninPageState extends State<SigninPage> {
             authController.errorMessage ?? "Invalid email or password",
             style: const TextStyle(fontSize: 18),
           ),
-          backgroundColor: Colors.red,
+          backgroundColor: Theme.of(context).colorScheme.error,
         ),
       );
     }
@@ -71,7 +71,7 @@ class _SigninPageState extends State<SigninPage> {
     );
 
     return Scaffold(
-      backgroundColor: Colors.white,
+      backgroundColor: Theme.of(context).colorScheme.surface,
       body: Padding(
         padding: const EdgeInsets.all(20),
         child: Center(
@@ -93,14 +93,19 @@ class _SigninPageState extends State<SigninPage> {
                   style: GoogleFonts.poppins(
                     fontSize: 28,
                     fontWeight: FontWeight.bold,
-                    color: Colors.black,
+                    color: Theme.of(context).colorScheme.onSurface,
                   ),
                 ),
                 const SizedBox(height: 10),
 
-                const Text(
+                Text(
                   "Login",
-                  style: TextStyle(fontSize: 22, color: Colors.black87),
+                  style: TextStyle(
+                    fontSize: 22,
+                    color: Theme.of(
+                      context,
+                    ).colorScheme.onSurface.withOpacity(0.87),
+                  ),
                 ),
                 const SizedBox(height: 40),
 

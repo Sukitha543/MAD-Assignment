@@ -3,10 +3,7 @@ import 'package:flutter/material.dart';
 class OrderNowButton extends StatelessWidget {
   final VoidCallback onPressed;
 
-  const OrderNowButton
-  ({super.key,  
-  required this.onPressed
-  });
+  const OrderNowButton({super.key, required this.onPressed});
 
   @override
   Widget build(BuildContext context) {
@@ -16,16 +13,21 @@ class OrderNowButton extends StatelessWidget {
       child: ElevatedButton(
         onPressed: onPressed,
         style: ElevatedButton.styleFrom(
-          backgroundColor: Colors.green, 
-          foregroundColor: Colors.white, 
-          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+          backgroundColor: Theme.of(context).brightness == Brightness.light
+              ? Colors.green
+              : const Color(0xFF1B5E20),
+          foregroundColor: Colors.white,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(12),
+          ),
         ),
         child: Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             Icon(Icons.wallet, size: 22),
             SizedBox(width: 8),
-            Text("ORDER NOW",
+            Text(
+              "ORDER NOW",
               style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
             ),
           ],

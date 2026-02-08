@@ -27,11 +27,25 @@ class _BottomNavigationState extends State<BottomNavigation> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: Colors.black,
-        title: const Text("TIMEBRIDGE", style: TextStyle(color: Colors.white)),
+        backgroundColor: Theme.of(context).brightness == Brightness.light
+            ? Colors.black
+            : Theme.of(context).appBarTheme.backgroundColor,
+        title: Text(
+          "TIMEBRIDGE",
+          style: TextStyle(
+            color: Theme.of(context).brightness == Brightness.light
+                ? Colors.white
+                : Theme.of(context).colorScheme.onSurface,
+          ),
+        ),
         actions: [
           IconButton(
-            icon: const Icon(Icons.account_circle, color: Colors.white),
+            icon: Icon(
+              Icons.account_circle,
+              color: Theme.of(context).brightness == Brightness.light
+                  ? Colors.white
+                  : Theme.of(context).colorScheme.onSurface,
+            ),
             onPressed: () {
               Navigator.of(context).push(
                 MaterialPageRoute<void>(builder: (context) => ProfilePage()),
@@ -41,8 +55,13 @@ class _BottomNavigationState extends State<BottomNavigation> {
         ],
       ),
       bottomNavigationBar: BottomNavigationBar(
-        selectedItemColor: Colors.black,
-        unselectedItemColor: Colors.blueGrey,
+        selectedItemColor: Theme.of(context).colorScheme.primary,
+        unselectedItemColor: Theme.of(
+          context,
+        ).colorScheme.onSurface.withOpacity(0.6),
+        backgroundColor: Theme.of(
+          context,
+        ).bottomAppBarTheme.color, // Optional: ensure bg is correct
         currentIndex: currentIndex,
         onTap: (index) {
           setState(() {

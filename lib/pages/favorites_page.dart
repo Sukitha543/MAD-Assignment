@@ -28,19 +28,19 @@ class _FavoritesPageState extends State<FavoritesPage> {
   Widget build(BuildContext context) {
     return SafeArea(
       child: Scaffold(
-        backgroundColor: Colors.white,
+        // backgroundColor handled by theme
         appBar: AppBar(
           title: Text(
             "FAVORITES",
             style: GoogleFonts.poppins(
               fontWeight: FontWeight.w600,
-              color: Colors.black,
+              color: Theme.of(context).colorScheme.onSurface,
             ),
           ),
           centerTitle: true,
-          backgroundColor: Colors.white,
+          backgroundColor: Theme.of(context).appBarTheme.backgroundColor,
           elevation: 0,
-          iconTheme: const IconThemeData(color: Colors.black),
+          actions: [], // Remove if not needed, iconTheme handled globally
         ),
         body: Consumer<FavoriteController>(
           builder: (context, controller, child) {
@@ -71,7 +71,7 @@ class _FavoritesPageState extends State<FavoritesPage> {
               );
             }
             return Padding(
-              padding: const EdgeInsets.all(16.0),
+              padding: const EdgeInsets.all(15),
               child: GridView.builder(
                 physics: const BouncingScrollPhysics(),
                 itemCount: controller.favorites.length,
@@ -96,19 +96,25 @@ class _FavoritesPageState extends State<FavoritesPage> {
                       );
                     },
                     child: Container(
-                      padding: const EdgeInsets.all(12),
+                      padding: const EdgeInsets.all(10),
                       decoration: BoxDecoration(
-                        color: Colors.white,
+                        color: Theme.of(context).cardColor,
                         borderRadius: BorderRadius.circular(12),
                         boxShadow: [
                           BoxShadow(
-                            color: Colors.grey.withValues(alpha: 0.1),
+                            color: Theme.of(
+                              context,
+                            ).shadowColor.withValues(alpha: 0.1),
                             spreadRadius: 1,
                             blurRadius: 5,
                             offset: const Offset(0, 2),
                           ),
                         ],
-                        border: Border.all(color: Colors.grey.shade200),
+                        border: Border.all(
+                          color: Theme.of(
+                            context,
+                          ).dividerColor.withValues(alpha: 0.2),
+                        ),
                       ),
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
@@ -119,33 +125,28 @@ class _FavoritesPageState extends State<FavoritesPage> {
                             child: SizedBox(
                               height: 120,
                               width: double.infinity,
-                              child: product.image.startsWith('http')
-                                  ? CachedNetworkImage(
-                                      imageUrl: product.image,
-                                      fit: BoxFit.cover,
-                                      placeholder: (context, url) =>
-                                          const Center(
-                                            child: CircularProgressIndicator(
-                                              strokeWidth: 2,
-                                            ),
-                                          ),
-                                      errorWidget: (context, url, error) =>
-                                          const Icon(Icons.broken_image),
-                                    )
-                                  : Image.asset(
-                                      product.image,
-                                      fit: BoxFit.cover,
-                                      errorBuilder: (_, __, ___) =>
-                                          const Icon(Icons.image),
-                                    ),
+                              child: CachedNetworkImage(
+                                imageUrl: product.image,
+                                fit: BoxFit.cover,
+                                placeholder: (context, url) => const Center(
+                                  child: CircularProgressIndicator(
+                                    strokeWidth: 2,
+                                  ),
+                                ),
+                                errorWidget: (context, url, error) =>
+                                    const Icon(Icons.broken_image),
+                              ),
                             ),
                           ),
+                          const SizedBox(height: 10),
                           // Brand
                           Text(
                             product.brand,
                             style: GoogleFonts.poppins(
                               fontSize: 12,
-                              color: Colors.grey[600],
+                              color: Theme.of(
+                                context,
+                              ).colorScheme.onSurfaceVariant,
                             ),
                           ),
                           Row(
@@ -217,7 +218,7 @@ class _FavoritesPageState extends State<FavoritesPage> {
                             style: GoogleFonts.poppins(
                               fontSize: 14,
                               fontWeight: FontWeight.w600,
-                              color: const Color(0xFF5C4033),
+                              color: Theme.of(context).colorScheme.primary,
                             ),
                           ),
                         ],

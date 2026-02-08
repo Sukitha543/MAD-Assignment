@@ -87,7 +87,7 @@ class _HomePageState extends State<HomePage> {
     }
 
     return Scaffold(
-      backgroundColor: Colors.white,
+      // backgroundColor handled by theme
       body: SafeArea(
         child: SingleChildScrollView(
           physics: BouncingScrollPhysics(),
@@ -102,7 +102,8 @@ class _HomePageState extends State<HomePage> {
                   style: TextStyle(
                     fontSize: 20,
                     fontWeight: FontWeight.w700,
-                    color: Colors.grey,
+
+                    color: Theme.of(context).colorScheme.onSurfaceVariant,
                   ),
                 ),
                 Text(
@@ -110,7 +111,8 @@ class _HomePageState extends State<HomePage> {
                   style: TextStyle(
                     fontSize: 30,
                     fontWeight: FontWeight.bold,
-                    color: Colors.black,
+
+                    color: Theme.of(context).colorScheme.onSurface,
                   ),
                 ),
                 const SizedBox(height: 8),
@@ -120,9 +122,15 @@ class _HomePageState extends State<HomePage> {
                     vertical: 6,
                   ),
                   decoration: BoxDecoration(
-                    color: Colors.green.shade50,
+                    color: Theme.of(context).brightness == Brightness.light
+                        ? Colors.green.shade50
+                        : Theme.of(context).colorScheme.surfaceContainerHighest,
                     borderRadius: BorderRadius.circular(20),
-                    border: Border.all(color: Colors.green),
+                    border: Border.all(
+                      color: Theme.of(context).brightness == Brightness.light
+                          ? Colors.green
+                          : Colors.transparent,
+                    ),
                   ),
                   child: Row(
                     mainAxisSize: MainAxisSize.min,
@@ -159,7 +167,8 @@ class _HomePageState extends State<HomePage> {
                   "From classic designs to modern masterpieces, each watch in our collection is meticulously crafted to combine precision, beauty, and legacy. Elevate your style with a timepiece that tells more than time—it tells your story.",
                   style: TextStyle(
                     fontSize: 18,
-                    color: const Color.fromARGB(255, 67, 65, 65),
+
+                    color: Theme.of(context).textTheme.bodyMedium?.color,
                   ),
                 ),
                 SizedBox(height: 15),

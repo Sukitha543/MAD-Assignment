@@ -16,23 +16,23 @@ class FavoriteButton extends StatelessWidget {
       height: 50,
       width: 50,
       decoration: BoxDecoration(
-        color: Colors.grey.shade200,
+        color: Theme.of(context).colorScheme.surfaceContainerHighest,
         borderRadius: BorderRadius.circular(8),
       ),
       child: isLoading
-          ? const Center(
+          ? Center(
               child: SizedBox(
                 width: 24,
                 height: 24,
                 child: CircularProgressIndicator(
                   strokeWidth: 2,
-                  color: Colors.black,
+                  color: Theme.of(context).colorScheme.onSurface,
                 ),
               ),
             )
           : IconButton(
               icon: const Icon(Icons.favorite_border, size: 28),
-              color: Colors.black,
+              color: Theme.of(context).colorScheme.onSurface,
               onPressed: onPressed,
             ),
     );

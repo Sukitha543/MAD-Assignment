@@ -9,7 +9,9 @@ class CheckoutTotal extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
-        color: Colors.green.shade50,
+        color: Theme.of(context).brightness == Brightness.light
+            ? Colors.green.shade50
+            : Theme.of(context).colorScheme.surfaceContainerHighest,
         borderRadius: BorderRadius.circular(12),
       ),
       child: Row(
@@ -21,7 +23,11 @@ class CheckoutTotal extends StatelessWidget {
           ),
           Text(
             "\$${totalPrice.toStringAsFixed(2)}",
-            style: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+            style: TextStyle(
+              fontSize: 20,
+              fontWeight: FontWeight.bold,
+              color: Theme.of(context).colorScheme.onSurface,
+            ),
           ),
         ],
       ),

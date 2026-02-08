@@ -14,11 +14,13 @@ class SpecCard extends StatelessWidget {
       child: Container(
         width: double.infinity,
         decoration: BoxDecoration(
-          color: Colors.grey[100],
+          color: Theme.of(context).brightness == Brightness.light
+              ? Colors.grey[100]
+              : Theme.of(context).cardColor,
           borderRadius: BorderRadius.circular(16),
           boxShadow: [
             BoxShadow(
-              color: Colors.black12,
+              color: Theme.of(context).shadowColor.withOpacity(0.12),
               blurRadius: 8,
               offset: Offset(0, 4),
             ),
@@ -28,12 +30,12 @@ class SpecCard extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             SizedBox(height: 12),
-            specRow("Diameter", product.diameter),
-            specRow("Type", product.type),
-            specRow("Material", product.material),
-            specRow("Strap", product.strap),
-            specRow("Water Resistance", product.waterResistance),
-            specRow("Calibre", product.caliber),
+            SpecRow(title: "Diameter", value: product.diameter),
+            SpecRow(title: "Type", value: product.type),
+            SpecRow(title: "Material", value: product.material),
+            SpecRow(title: "Strap", value: product.strap),
+            SpecRow(title: "Water Resistance", value: product.waterResistance),
+            SpecRow(title: "Calibre", value: product.caliber),
           ],
         ),
       ),
