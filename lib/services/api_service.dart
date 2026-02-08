@@ -146,4 +146,79 @@ class ApiService {
       rethrow;
     }
   }
+
+  // STRIPE CHECKOUT SESSION (POST)
+  static Future<Map<String, dynamic>> createCheckoutSession({
+    required String name,
+    required String email,
+    required String phone,
+    required String address,
+    required String city,
+    required String token,
+  }) async {
+    final url = Uri.parse('$baseUrl/checkout');
+    final headers = {
+      'Content-Type': 'application/json',
+      'Accept': 'application/json',
+      'Authorization': 'Bearer $token',
+    };
+    final body = jsonEncode({
+      'name': name,
+      'email': email,
+      'phone': phone,
+      'address': address,
+      'city': city,
+    });
+
+    try {
+      final response = await http.post(url, headers: headers, body: body);
+
+      if (response.statusCode == 200 || response.statusCode == 201) {
+        return jsonDecode(response.body);
+      } else {
+        try {
+          final errorBody = jsonDecode(response.body);
+          throw Exception(errorBody['message'] ?? 'Checkout failed');
+        } catch (_) {
+          throw Exception('Checkout failed: ${response.statusCode}');
+        }
+      }
+    } catch (e) {
+      rethrow;
+    }
+  }
+
+  // CONFIRM PAYMENT (GET)
+  static Future<Map<String, dynamic>> confirmPayment({
+    required String sessionId,
+    required String token,
+  }) async {
+    final url = Uri.parse('$baseUrl/checkout/success?session_id=$sessionId');
+    final headers = {
+      'Content-Type': 'application/json',
+      'Accept': 'application/json',
+      'Authorization': 'Bearer $token',
+    };
+
+    try {
+      final response = await http.get(url, headers: headers);
+
+      if (response.statusCode == 200) {
+        return jsonDecode(response.body);
+      } else {
+        try {
+          final errorBody = jsonDecode(response.body);
+          throw Exception(
+            errorBody['message'] ?? 'Payment confirmation failed',
+          );
+        } catch (_) {
+          throw Exception(
+            'Payment confirmation failed: ${response.statusCode}',
+          );
+        }
+      }
+    } catch (e) {
+      rethrow;
+    }
+  }
 }

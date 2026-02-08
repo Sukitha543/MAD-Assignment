@@ -40,4 +40,20 @@ class Product {
       image: json['image'] ?? '',
     );
   }
+
+  Map<String, dynamic> toMap() {
+    return {
+      'id': id,
+      'brand': brand,
+      'model': model,
+      'diameter': diameter,
+      'type': type,
+      'material': material,
+      'strap': strap,
+      'water_resistance': waterResistance,
+      'caliber': caliber,
+      'price': price,
+      'image': image,
+    };
+  }
 }

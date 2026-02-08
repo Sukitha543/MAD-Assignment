@@ -6,7 +6,7 @@ class BrandCard extends StatelessWidget {
   const BrandCard({super.key, required this.imageUrl});
 
   @override
-  Widget build(BuildContext context) {  
+  Widget build(BuildContext context) {
     return Container(
       decoration: BoxDecoration(
         color: Colors.white,
@@ -19,11 +19,7 @@ class BrandCard extends StatelessWidget {
           ),
         ],
       ),
-      child: Image.asset(
-        imageUrl,
-        width: 120,
-        fit: BoxFit.cover,
-      ),
+      child: Image.asset(imageUrl, width: 120, fit: BoxFit.cover),
     );
   }
 }

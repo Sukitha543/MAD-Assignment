@@ -6,6 +6,7 @@ import 'package:mad_assignment/models/product.dart';
 import 'package:mad_assignment/widgets/add_to_cart_button.dart';
 import 'package:mad_assignment/widgets/favorite_button.dart';
 import 'package:mad_assignment/widgets/spec_card.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 
 class ProductDetailsPage extends StatefulWidget {
   final Product product;
@@ -40,12 +41,14 @@ class _ProductDetailsPageState extends State<ProductDetailsPage> {
                 SizedBox(height: 10),
                 ClipRRect(
                   child: widget.product.image.startsWith('http')
-                      ? Image.network(
-                          widget.product.image,
+                      ? CachedNetworkImage(
+                          imageUrl: widget.product.image,
                           width: double.infinity,
                           height: 250,
                           fit: BoxFit.cover,
-                          errorBuilder: (context, error, stackTrace) =>
+                          placeholder: (context, url) =>
+                              const Center(child: CircularProgressIndicator()),
+                          errorWidget: (context, url, error) =>
                               const Icon(Icons.broken_image, size: 100),
                         )
                       : Image.asset(

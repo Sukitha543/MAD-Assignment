@@ -1,6 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:mad_assignment/services/location_service.dart';
 import 'package:mad_assignment/widgets/payment_button.dart';
+import 'package:mad_assignment/services/api_service.dart';
+import 'package:mad_assignment/controllers/auth_controller.dart';
+import 'package:mad_assignment/controllers/cart_controller.dart';
+import 'package:mad_assignment/pages/payment_webview.dart';
+import 'package:provider/provider.dart';
 
 class ShippingPage extends StatefulWidget {
   final double totalPrice;
@@ -161,22 +166,7 @@ class _ShippingPageState extends State<ShippingPage> {
                             ),
                           );
                         } else {
-                          shippingNameController.clear();
-                          shippingEmailController.clear();
-                          shippingContactController.clear();
-                          shippingAddressController.clear();
-                          shippingCityController.clear();
-                          ScaffoldMessenger.of(context).showSnackBar(
-                            const SnackBar(
-                              content: Text(
-                                "Order Placed Sucessfully",
-                                style: TextStyle(fontSize: 18),
-                              ),
-                              backgroundColor: Colors.green,
-                              duration: Duration(seconds: 1),
-                            ),
-                            // NAVIGATE TO STRIPE PAYMENT GATEWAY
-                          );
+                          _processPayment();
                         }
                       },
                     ),
@@ -188,5 +178,119 @@ class _ShippingPageState extends State<ShippingPage> {
         ),
       ),
     );
+  }
+
+  Future<void> _processPayment() async {
+    // 1. Show Loading
+    showDialog(
+      context: context,
+      barrierDismissible: false,
+      builder: (context) => const Center(child: CircularProgressIndicator()),
+    );
+
+    try {
+      final authController = Provider.of<AuthController>(
+        context,
+        listen: false,
+      );
+      final token = await authController.getToken();
+
+      if (token == null) {
+        throw Exception("User not authenticated");
+      }
+
+      // 2. Create Checkout Session
+      final sessionData = await ApiService.createCheckoutSession(
+        name: shippingNameController.text,
+        email: shippingEmailController.text,
+        phone: shippingContactController.text,
+        address: shippingAddressController.text,
+        city: shippingCityController.text,
+        token: token,
+      );
+
+      // Close Loading
+      if (mounted) Navigator.pop(context);
+
+      final checkoutUrl = sessionData['checkout_url'];
+
+      // 3. Navigate to WebView
+      if (mounted && checkoutUrl != null) {
+        final result = await Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) => PaymentWebView(checkoutUrl: checkoutUrl),
+          ),
+        );
+
+        // 4. Handle Result
+        if (result != null && result['success'] == true) {
+          final sessionId = result['session_id'];
+          if (sessionId != null) {
+            _confirmOrder(sessionId, token);
+          }
+        } else {
+          ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(
+              content: Text("Payment Cancelled"),
+              backgroundColor: Colors.orange,
+            ),
+          );
+        }
+      }
+    } catch (e) {
+      if (mounted) Navigator.pop(context); // Close loading if open
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text("Error: ${e.toString().replaceAll('Exception: ', '')}"),
+          backgroundColor: Colors.red,
+        ),
+      );
+    }
+  }
+
+  Future<void> _confirmOrder(String sessionId, String token) async {
+    showDialog(
+      context: context,
+      barrierDismissible: false,
+      builder: (context) => const Center(child: CircularProgressIndicator()),
+    );
+
+    try {
+      await ApiService.confirmPayment(sessionId: sessionId, token: token);
+
+      if (mounted) {
+        // Clear Cart Locally
+        Provider.of<CartController>(context, listen: false).clearCartLocally();
+
+        Navigator.pop(context); // Close loading
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+            content: Text(
+              "Order Placed Successfully!",
+              style: TextStyle(fontSize: 18),
+            ),
+            backgroundColor: Colors.green,
+            duration: Duration(seconds: 2),
+          ),
+        );
+
+        // Navigate to Home or Orders
+        // Assuming there is a route '/' or similar, or pop to first
+        Navigator.of(context).popUntil((route) => route.isFirst);
+      }
+    } catch (e) {
+      if (mounted) {
+        Navigator.pop(context);
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text(
+              "Payment Successful but Order Confirmation Failed: $e",
+            ),
+            backgroundColor: Colors.red,
+          ),
+        );
+      }
+    }
   }
 }

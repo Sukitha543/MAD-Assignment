@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 
 import 'package:provider/provider.dart';
 import 'package:mad_assignment/controllers/favorite_controller.dart';
@@ -119,10 +120,16 @@ class _FavoritesPageState extends State<FavoritesPage> {
                               height: 120,
                               width: double.infinity,
                               child: product.image.startsWith('http')
-                                  ? Image.network(
-                                      product.image,
+                                  ? CachedNetworkImage(
+                                      imageUrl: product.image,
                                       fit: BoxFit.cover,
-                                      errorBuilder: (_, __, ___) =>
+                                      placeholder: (context, url) =>
+                                          const Center(
+                                            child: CircularProgressIndicator(
+                                              strokeWidth: 2,
+                                            ),
+                                          ),
+                                      errorWidget: (context, url, error) =>
                                           const Icon(Icons.broken_image),
                                     )
                                   : Image.asset(
@@ -171,6 +178,9 @@ class _FavoritesPageState extends State<FavoritesPage> {
                                       constraints: const BoxConstraints(),
                                       padding: EdgeInsets.zero,
                                       onPressed: () async {
+                                        final messenger = ScaffoldMessenger.of(
+                                          context,
+                                        );
                                         setState(() {
                                           _deletingItems[favorite.id] = true;
                                         });
@@ -183,9 +193,7 @@ class _FavoritesPageState extends State<FavoritesPage> {
                                           setState(() {
                                             _deletingItems.remove(favorite.id);
                                           });
-                                          ScaffoldMessenger.of(
-                                            context,
-                                          ).showSnackBar(
+                                          messenger.showSnackBar(
                                             const SnackBar(
                                               content: Text(
                                                 "Removed from favorites",
