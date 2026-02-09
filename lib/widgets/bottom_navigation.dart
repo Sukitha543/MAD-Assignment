@@ -58,7 +58,7 @@ class _BottomNavigationState extends State<BottomNavigation> {
         selectedItemColor: Theme.of(context).colorScheme.primary,
         unselectedItemColor: Theme.of(
           context,
-        ).colorScheme.onSurface.withOpacity(0.6),
+        ).colorScheme.onSurface.withValues(alpha: 0.6),
         backgroundColor: Theme.of(
           context,
         ).bottomAppBarTheme.color, // Optional: ensure bg is correct

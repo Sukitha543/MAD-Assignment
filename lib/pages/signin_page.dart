@@ -104,7 +104,7 @@ class _SigninPageState extends State<SigninPage> {
                     fontSize: 22,
                     color: Theme.of(
                       context,
-                    ).colorScheme.onSurface.withOpacity(0.87),
+                    ).colorScheme.onSurface.withValues(alpha: 0.87),
                   ),
                 ),
                 const SizedBox(height: 40),

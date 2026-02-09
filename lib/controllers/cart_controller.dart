@@ -16,14 +16,6 @@ class CartController with ChangeNotifier {
   double get total => _total;
   bool get isLoading => _isLoading;
 
-  CartController() {
-    _init();
-  }
-
-  Future<void> _init() async {
-    await fetchCart();
-  }
-
   // Read token
   Future<String?> _getToken() async {
     return await _storage.read(key: 'token');
@@ -74,17 +66,12 @@ class CartController with ChangeNotifier {
       }
 
       try {
-        await ApiService.post(
-          'cart/add/$productId',
-          {}, // Empty body as backend uses URL param
-          token: token,
-        );
+        await ApiService.post('cart/add/$productId', {}, token: token);
 
         // If successful, refresh cart
         await fetchCart();
         return 'added';
       } catch (e) {
-        // Handle 409 Conflict (Item already in cart)
         // ApiService throws exception with message. The message for 409 is 'Item already in cart'
         if (e.toString().contains('Item already in cart')) {
           return 'exists';

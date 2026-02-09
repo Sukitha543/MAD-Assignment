@@ -28,7 +28,6 @@ class _FavoritesPageState extends State<FavoritesPage> {
   Widget build(BuildContext context) {
     return SafeArea(
       child: Scaffold(
-        // backgroundColor handled by theme
         appBar: AppBar(
           title: Text(
             "FAVORITES",
@@ -40,7 +39,7 @@ class _FavoritesPageState extends State<FavoritesPage> {
           centerTitle: true,
           backgroundColor: Theme.of(context).appBarTheme.backgroundColor,
           elevation: 0,
-          actions: [], // Remove if not needed, iconTheme handled globally
+          actions: [],
         ),
         body: Consumer<FavoriteController>(
           builder: (context, controller, child) {

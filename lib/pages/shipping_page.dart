@@ -51,7 +51,6 @@ class _ShippingPageState extends State<ShippingPage> {
   Widget build(BuildContext context) {
     return SafeArea(
       child: Scaffold(
-        // backgroundColor handled by theme
         appBar: AppBar(
           title: const Text("Shipping Details"),
           backgroundColor: Theme.of(context).brightness == Brightness.light
@@ -73,7 +72,9 @@ class _ShippingPageState extends State<ShippingPage> {
                   borderRadius: BorderRadius.circular(15),
                   boxShadow: [
                     BoxShadow(
-                      color: Theme.of(context).shadowColor.withOpacity(0.5),
+                      color: Theme.of(
+                        context,
+                      ).shadowColor.withValues(alpha: 0.5),
                       blurRadius: 10,
                       offset: const Offset(0, 5),
                     ),

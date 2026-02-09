@@ -20,7 +20,9 @@ class CustomLinkText extends StatelessWidget {
         Text(
           normalText,
           style: TextStyle(
-            color: Theme.of(context).colorScheme.onSurface.withOpacity(0.87),
+            color: Theme.of(
+              context,
+            ).colorScheme.onSurface.withValues(alpha: 0.87),
             fontSize: 18,
           ),
         ),

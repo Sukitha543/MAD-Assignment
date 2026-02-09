@@ -21,7 +21,7 @@ class FavoriteController with ChangeNotifier {
 
   // Sync pending offline actions
   Future<void> _syncPendingChanges(String token) async {
-    // 1. Process Pending Adds
+    // Process Pending Adds
     final pendingAdds = await DatabaseHelper.instance.getPendingAdds();
     for (int productId in pendingAdds) {
       try {
@@ -30,11 +30,10 @@ class FavoriteController with ChangeNotifier {
       } catch (e) {
         debugPrint('Sync Add Error for product $productId: $e');
         // Keep in queue if it's a network error, remove if 404/400?
-        // simple logic: keep trying until success or manual intervention
       }
     }
 
-    // 2. Process Pending Removes
+    //Process Pending Removes
     final pendingRemoves = await DatabaseHelper.instance.getPendingRemoves();
     for (int favoriteId in pendingRemoves) {
       try {
@@ -177,8 +176,6 @@ class FavoriteController with ChangeNotifier {
 
           // 2. Handle queues
           if (favoriteId < 0) {
-            // It was a pending add. Remove the pending add request where product_id matches.
-            // Since itemToRemove has the product, we use it.
             await DatabaseHelper.instance.removePendingAdd(
               itemToRemove.product.id,
             );

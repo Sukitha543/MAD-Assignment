@@ -24,7 +24,6 @@ class _ProductDetailsPageState extends State<ProductDetailsPage> {
   Widget build(BuildContext context) {
     return SafeArea(
       child: Scaffold(
-        // backgroundColor handled by theme
         appBar: AppBar(
           title: Text("Product details"),
           centerTitle: true,

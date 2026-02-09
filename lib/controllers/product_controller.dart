@@ -16,13 +16,13 @@ class ProductController with ChangeNotifier {
   bool get isLoading => _isLoading;
   String? get errorMessage => _errorMessage;
 
-  ProductController() {
+  /*ProductController() {
     _init();
   }
 
   Future<void> _init() async {
     await fetchProducts();
-  }
+  }*/
 
   //FETCH PRODUCTS
   Future<void> fetchProducts() async {
@@ -42,13 +42,9 @@ class ProductController with ChangeNotifier {
             .toList();
 
         // Sync with Local DB
-        // Optionally clear old products first or just upsert
         await DatabaseHelper.instance.clearProducts();
         await DatabaseHelper.instance.insertProducts(_products);
       } else {
-        // No token, maybe load from DB if we want to allow guest viewing of cached data?
-        // Or throw error. For now, let's assume valid session required.
-        // But if offline, we might still have a token in storage.
         throw Exception("No authentication token found.");
       }
     } catch (e) {
@@ -57,10 +53,10 @@ class ProductController with ChangeNotifier {
       try {
         _products = await DatabaseHelper.instance.getProducts();
         if (_products.isNotEmpty) {
-          // If we have cached products, clear the error so the UI shows them
+          // If there are cached products, clear the error so the UI shows
           _errorMessage = null;
         } else {
-          // Only show error if we have NO data to show
+          // Only show error if no data to show
           _errorMessage = e.toString().replaceAll('Exception: ', '');
         }
       } catch (dbError) {

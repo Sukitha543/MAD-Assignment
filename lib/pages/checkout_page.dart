@@ -20,7 +20,6 @@ class CheckoutPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return SafeArea(
       child: Scaffold(
-        // backgroundColor handled by theme
         appBar: AppBar(
           title: Text("Checkout"),
           backgroundColor: Theme.of(context).brightness == Brightness.light

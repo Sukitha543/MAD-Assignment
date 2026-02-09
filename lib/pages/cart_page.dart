@@ -7,8 +7,21 @@ import '../pages/checkout_page.dart';
 import '../widgets/cart_item_card.dart';
 import '../widgets/checkout_summary_card.dart';
 
-class CartPage extends StatelessWidget {
+class CartPage extends StatefulWidget {
   const CartPage({super.key});
+
+  @override
+  State<CartPage> createState() => _CartPageState();
+}
+
+class _CartPageState extends State<CartPage> {
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      context.read<CartController>().fetchCart();
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -21,10 +34,6 @@ class CartPage extends StatelessWidget {
               return const Center(child: CircularProgressIndicator());
             }
             if (controller.cartItems.isEmpty) {
-              // Handle empty cart view or redirect
-              // Note: The previous logic redirected to BottomNavigation which might contain this page,
-              // causing a loop or weird UX if this IS the cart tab.
-              // Better to show an empty state message here.
               return Center(
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
@@ -89,7 +98,6 @@ class CartPage extends StatelessWidget {
                                 duration: Duration(seconds: 1),
                               ),
                             );
-                            // Optional: Redirect if needed, or just let the empty view show
                           }
                         },
                       );

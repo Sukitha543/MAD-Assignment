@@ -22,7 +22,7 @@ class CartItemCard extends StatelessWidget {
         borderRadius: BorderRadius.circular(12),
         boxShadow: [
           BoxShadow(
-            color: Theme.of(context).shadowColor.withOpacity(0.3),
+            color: Theme.of(context).shadowColor.withValues(alpha: 0.3),
             blurRadius: 10,
             offset: Offset(0, 3),
           ),

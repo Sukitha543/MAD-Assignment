@@ -22,7 +22,7 @@ class CheckoutSummaryCard extends StatelessWidget {
         ),
         boxShadow: [
           BoxShadow(
-            color: Theme.of(context).shadowColor.withOpacity(0.3),
+            color: Theme.of(context).shadowColor.withValues(alpha: 0.3),
             blurRadius: 6,
             offset: Offset(0, -3),
           ),

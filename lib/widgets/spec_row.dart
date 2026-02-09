@@ -25,7 +25,9 @@ class SpecRow extends StatelessWidget {
             value,
             style: TextStyle(
               fontSize: 18,
-              color: Theme.of(context).colorScheme.onSurface.withOpacity(0.54),
+              color: Theme.of(
+                context,
+              ).colorScheme.onSurface.withValues(alpha: 0.54),
             ),
           ),
         ],
